@@ -8,13 +8,15 @@ interface Props {
 const { lang: propLang } = Astro.props;
 const lang = propLang || getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const today = new Date();
+const currentYear = new Date().getFullYear();
+const startYear = 2025;
+const yearRange = currentYear > startYear ? `${startYear}~${currentYear}` : `${startYear}`;
 const authorName = lang === 'zh' ? '顾佳凯' : 'Jiakai Gu';
 ---
 
 <footer>
 	<div class="footer-content">
-		&copy; {today.getFullYear()} {authorName} {t('footer.copyright')}
+		&copy; {yearRange} {authorName} {t('footer.copyright')}
 	</div>
 </footer>
 <style>
