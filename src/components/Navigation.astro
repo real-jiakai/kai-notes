@@ -1,19 +1,44 @@
 ---
 // 导航栏组件
+import { getLangFromUrl, useTranslations, getLocalePath, getAlternateLocaleUrl } from '../i18n/utils';
+import { languages } from '../i18n/ui';
+import { SITE_TITLE_I18N } from '../consts';
+
+interface Props {
+	lang?: 'zh' | 'en';
+}
+
+const { lang: propLang } = Astro.props;
+const lang = propLang || getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const siteTitle = SITE_TITLE_I18N[lang];
+const homePath = getLocalePath(lang, '/');
+const aboutPath = getLocalePath(lang, '/about/');
+
+// Generate URLs for each language
+const langUrls = Object.fromEntries(
+	Object.keys(languages).map(code => [code, getAlternateLocaleUrl(Astro.url, code as 'zh' | 'en')])
+);
+
+const otherLang = lang === 'zh' ? 'en' : 'zh';
+const otherLangUrl = langUrls[otherLang];
+const otherLangName = languages[otherLang];
+const rssPath = lang === 'zh' ? '/rss.xml' : '/en/rss.xml';
 ---
 
 <nav class="navigation">
 	<div class="nav-container">
 		<div class="nav-left">
-			<span class="site-title">顾佳凯的微信公众号</span>
+			<span class="site-title">{siteTitle}</span>
 		</div>
 		<div class="nav-center">
-			<a href="/" class="nav-link">首页</a>
-			<a href="/about/" class="nav-link">关于</a>
+			<a href={homePath} class="nav-link">{t('nav.home')}</a>
+			<a href={aboutPath} class="nav-link">{t('nav.about')}</a>
 		</div>
 		<div class="nav-right">
 			<a href="https://github.com/real-jiakai/mp-blog" class="nav-link" target="_blank">GitHub</a>
-			<a href="/rss.xml" class="nav-link">RSS</a>
+			<a href={rssPath} class="nav-link">RSS</a>
+			<a href={otherLangUrl} class="nav-link">{otherLangName}</a>
 		</div>
 	</div>
 </nav>

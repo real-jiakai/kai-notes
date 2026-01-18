@@ -2,18 +2,24 @@
 import BaseHead from '../components/BaseHead.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
+import { useTranslations } from '../i18n/utils';
+
+const lang = 'zh';
+const t = useTranslations(lang);
+const SITE_TITLE = SITE_TITLE_I18N[lang];
+const SITE_DESCRIPTION = SITE_DESCRIPTION_I18N[lang];
 
 export async function getStaticPaths({ paginate }) {
 	const posts = (await getCollection('blog', ({ data }) => {
-		// 过滤掉草稿文章
-		return data.draft !== true;
+		// 过滤掉草稿文章，只显示中文文章
+		return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
 	})).sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 	);
-	
+
 	return paginate(posts, { pageSize: 10 });
 }
 
@@ -21,9 +27,9 @@ const { page } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 	<head>
-		<BaseHead title={`${SITE_TITLE} - 第${page.currentPage}页`} description={SITE_DESCRIPTION} />
+		<BaseHead title={t('article.list.page', { page: page.currentPage })} description={SITE_DESCRIPTION} />
 		<style>
 			html, body {
 				height: 100%;
@@ -40,7 +46,7 @@ const { page } = Astro.props;
 			}
 			
 			.desktop {
-				max-width: 1200px;
+				max-width: 800px;
 				margin: 0 auto;
 				padding: 0 20px;
 				flex: 1;
@@ -120,11 +126,11 @@ const { page } = Astro.props;
 		</style>
 	</head>
 	<body>
-		<Navigation />
+		<Navigation lang={lang} />
 		<div class="desktop">
 			<div class="window">
 				<div class="title-bar">
-					<div class="title-bar-text">微信公众号文章列表 - 第{page.currentPage}页</div>
+					<div class="title-bar-text">{t('article.list.page', { page: page.currentPage })}</div>
 				</div>
 				<div class="window-body">
 					<div class="article-list">
@@ -132,26 +138,26 @@ const { page } = Astro.props;
 							const date = new Date(post.data.pubDate);
 							const year = date.getFullYear();
 							const month = (date.getMonth() + 1).toString().padStart(2, '0');
-							
+
 							return (
 								<div class="article-item">
 									<a href={`/${year}/${month}/${post.data.slug || post.id}/`} class="article-title">
 										{post.data.title}
 									</a>
 									<span class="article-date">
-										<FormattedDate date={post.data.pubDate} />
+										<FormattedDate date={post.data.pubDate} lang={lang} />
 									</span>
 								</div>
 							);
 						})}
 					</div>
-					
+
 					{page.lastPage > 1 && (
 						<div class="pagination">
 							{page.url.prev && (
-								<a href={page.url.prev} class="button">上一页</a>
+								<a href={page.url.prev} class="button">{t('pagination.prev')}</a>
 							)}
-							
+
 							{Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => (
 								pageNum === page.currentPage ? (
 									<span class="current">{pageNum}</span>
@@ -159,15 +165,15 @@ const { page } = Astro.props;
 									<a href={pageNum === 1 ? '/' : `/${pageNum}/`}>{pageNum}</a>
 								)
 							))}
-							
+
 							{page.url.next && (
-								<a href={page.url.next} class="button">下一页</a>
+								<a href={page.url.next} class="button">{t('pagination.next')}</a>
 							)}
 						</div>
 					)}
 				</div>
 			</div>
 		</div>
-		<Footer />
+		<Footer lang={lang} />
 	</body>
 </html>

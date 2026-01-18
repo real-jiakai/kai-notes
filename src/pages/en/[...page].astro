@@ -1,42 +1,42 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../consts';
+import BaseHead from '../../components/BaseHead.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../components/FormattedDate.astro';
-import { useTranslations } from '../i18n/utils';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { useTranslations } from '../../i18n/utils';
 
-const lang = 'zh';
+const lang = 'en';
 const t = useTranslations(lang);
 const SITE_TITLE = SITE_TITLE_I18N[lang];
 const SITE_DESCRIPTION = SITE_DESCRIPTION_I18N[lang];
 
-const posts = (await getCollection('blog', ({ data }) => {
-	// 过滤掉草稿文章，只显示中文文章
-	return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
-})).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-).slice(0, 10); // 只显示前10篇文章
+export async function getStaticPaths({ paginate }) {
+	const posts = (await getCollection('blog', ({ data }) => {
+		// Filter out drafts, only show English posts
+		return data.draft !== true && data.lang === 'en';
+	})).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
 
-const allPosts = await getCollection('blog', ({ data }) => {
-	// 过滤掉草稿文章，只显示中文文章
-	return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
-});
-const totalPages = Math.ceil(allPosts.length / 10);
+	return paginate(posts, { pageSize: 10 });
+}
+
+const { page } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={t('article.list.page', { page: page.currentPage })} description={SITE_DESCRIPTION} />
 		<style>
 			html, body {
 				height: 100%;
 				margin: 0;
 				padding: 0;
 			}
-			
+
 			body {
 				background: #c0c0c0;
 				font-family: 'MS Sans Serif', sans-serif;
@@ -44,7 +44,7 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				flex-direction: column;
 				min-height: 100vh;
 			}
-			
+
 			.desktop {
 				max-width: 800px;
 				margin: 0 auto;
@@ -53,24 +53,24 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				display: flex;
 				flex-direction: column;
 			}
-			
+
 			.window {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
 			}
-			
+
 			.window-body {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
 			}
-			
+
 			.article-list {
 				flex: 1;
 				margin-bottom: 20px;
 			}
-			
+
 			.article-item {
 				padding: 20px 30px;
 				border-bottom: 1px solid #808080;
@@ -79,11 +79,11 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				align-items: center;
 				margin-bottom: 8px;
 			}
-			
+
 			.article-item:last-child {
 				border-bottom: none;
 			}
-			
+
 			.article-title {
 				color: #000080;
 				text-decoration: none;
@@ -92,11 +92,11 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				font-size: 18px;
 				line-height: 1.5;
 			}
-			
+
 			.article-title:hover {
 				text-decoration: underline;
 			}
-			
+
 			.article-date {
 				color: #666666;
 				font-size: 14px;
@@ -104,12 +104,12 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				white-space: nowrap;
 				min-width: 120px;
 			}
-			
+
 			.pagination {
 				text-align: center;
 				margin-top: 20px;
 			}
-			
+
 			.pagination a,
 			.pagination span {
 				margin: 0 5px;
@@ -117,7 +117,7 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				text-decoration: none;
 				color: #000000;
 			}
-			
+
 			.pagination .current {
 				font-weight: bold;
 				background: #000080;
@@ -130,18 +130,19 @@ const totalPages = Math.ceil(allPosts.length / 10);
 		<div class="desktop">
 			<div class="window">
 				<div class="title-bar">
-					<div class="title-bar-text">{t('article.list')}</div>
+					<div class="title-bar-text">{t('article.list.page', { page: page.currentPage })}</div>
 				</div>
 				<div class="window-body">
 					<div class="article-list">
-						{posts.map((post) => {
+						{page.data.map((post) => {
 							const date = new Date(post.data.pubDate);
 							const year = date.getFullYear();
 							const month = (date.getMonth() + 1).toString().padStart(2, '0');
+							const slug = post.data.slug || post.id.replace(/^en\//, '');
 
 							return (
 								<div class="article-item">
-									<a href={`/${year}/${month}/${post.data.slug || post.id}/`} class="article-title">
+									<a href={`/en/${year}/${month}/${slug}/`} class="article-title">
 										{post.data.title}
 									</a>
 									<span class="article-date">
@@ -152,14 +153,22 @@ const totalPages = Math.ceil(allPosts.length / 10);
 						})}
 					</div>
 
-					{totalPages > 1 && (
+					{page.lastPage > 1 && (
 						<div class="pagination">
-							<span class="current">1</span>
-							{Array.from({ length: totalPages - 1 }, (_, i) => i + 2).map((pageNum) => (
-								<a href={`/${pageNum}/`}>{pageNum}</a>
+							{page.url.prev && (
+								<a href={page.url.prev} class="button">{t('pagination.prev')}</a>
+							)}
+
+							{Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => (
+								pageNum === page.currentPage ? (
+									<span class="current">{pageNum}</span>
+								) : (
+									<a href={pageNum === 1 ? '/en/' : `/en/${pageNum}/`}>{pageNum}</a>
+								)
 							))}
-							{totalPages > 1 && (
-								<a href="/2/" class="button">{t('pagination.next')}</a>
+
+							{page.url.next && (
+								<a href={page.url.next} class="button">{t('pagination.next')}</a>
 							)}
 						</div>
 					)}

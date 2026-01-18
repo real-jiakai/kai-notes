@@ -1,33 +1,34 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../../layouts/BlogPost.astro';
+import BlogPost from '../../../../layouts/BlogPost.astro';
 import { render } from 'astro:content';
 
-const lang = 'zh';
+const lang = 'en';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog', ({ data }) => {
-		// 过滤掉草稿文章，只显示中文文章
-		return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
+		// Filter out drafts, only show English posts
+		return data.draft !== true && data.lang === 'en';
 	});
-	// 按发布日期排序
+	// Sort by publish date
 	const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-	
+
 	return sortedPosts.map((post, index) => {
 		const date = new Date(post.data.pubDate);
 		const year = date.getFullYear().toString();
 		const month = (date.getMonth() + 1).toString().padStart(2, '0');
-		const slug = post.data.slug || post.id; // 使用自定义slug或默认id
-		
-		// 获取上一篇和下一篇文章
+		// Remove 'en/' prefix from post.id since we're already in /en/ route
+		const slug = post.data.slug || post.id.replace(/^en\//, '');
+
+		// Get previous and next posts
 		const prevPost = index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null;
 		const nextPost = index > 0 ? sortedPosts[index - 1] : null;
-		
+
 		return {
-			params: { 
+			params: {
 				year: year,
 				month: month,
-				slug: slug 
+				slug: slug
 			},
 			props: {
 				post,

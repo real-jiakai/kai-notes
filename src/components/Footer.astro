@@ -1,10 +1,20 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+interface Props {
+	lang?: 'zh' | 'en';
+}
+
+const { lang: propLang } = Astro.props;
+const lang = propLang || getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const today = new Date();
+const authorName = lang === 'zh' ? '顾佳凯' : 'Jiakai Gu';
 ---
 
 <footer>
 	<div class="footer-content">
-		&copy; {today.getFullYear()} 顾佳凯 版权所有
+		&copy; {today.getFullYear()} {authorName} {t('footer.copyright')}
 	</div>
 </footer>
 <style>

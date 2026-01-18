@@ -4,25 +4,32 @@ import BaseHead from '../components/BaseHead.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import { getLangFromUrl, useTranslations, getLocalePath } from '../i18n/utils';
+import type { Lang } from '../i18n/utils';
 
 type Props = CollectionEntry<'blog'>['data'] & {
 	prevPost?: CollectionEntry<'blog'> | null;
 	nextPost?: CollectionEntry<'blog'> | null;
+	lang?: Lang;
 };
 
-const { title, description, pubDate, updatedDate, prevPost, nextPost } = Astro.props;
+const { title, description, pubDate, updatedDate, prevPost, nextPost, lang: propLang } = Astro.props;
+const lang = propLang || getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 // 生成文章URL的辅助函数
 function getPostUrl(post: CollectionEntry<'blog'>) {
 	const date = new Date(post.data.pubDate);
 	const year = date.getFullYear();
 	const month = (date.getMonth() + 1).toString().padStart(2, '0');
-	const slug = post.data.slug || post.id;
-	return `/${year}/${month}/${slug}/`;
+	// Remove 'en/' prefix from post.id for English posts
+	const slug = post.data.slug || post.id.replace(/^en\//, '');
+	const basePath = `/${year}/${month}/${slug}/`;
+	return getLocalePath(lang, basePath);
 }
 ---
 
-<html lang="en">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
@@ -192,21 +199,21 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 	</head>
 
 	<body>
-		<Navigation />
+		<Navigation lang={lang} />
 		<div class="desktop">
 			<div class="window">
 				<div class="title-bar">
-					<div class="title-bar-text">文章阅读</div>
+					<div class="title-bar-text">{t('article.reading')}</div>
 				</div>
 				<div class="window-body">
 					<div class="article-header">
 						<h1 class="article-title">{title}</h1>
 						<div class="article-date">
-							发布时间：<FormattedDate date={pubDate} />
+							{t('article.published')}: <FormattedDate date={pubDate} lang={lang} />
 						</div>
 						{updatedDate && (
 							<div class="article-date">
-								更新时间：<FormattedDate date={updatedDate} />
+								{t('article.updated')}: <FormattedDate date={updatedDate} lang={lang} />
 							</div>
 						)}
 					</div>
@@ -217,7 +224,7 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 						<div>
 							{prevPost ? (
 								<a href={getPostUrl(prevPost)} class="nav-link" title={prevPost.data.title}>
-									← 上一篇: {prevPost.data.title}
+									← {t('article.prev')}: {prevPost.data.title}
 								</a>
 							) : (
 								<div class="nav-placeholder"></div>
@@ -226,7 +233,7 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 						<div>
 							{nextPost ? (
 								<a href={getPostUrl(nextPost)} class="nav-link" title={nextPost.data.title}>
-									下一篇: {nextPost.data.title} →
+									{t('article.next')}: {nextPost.data.title} →
 								</a>
 							) : (
 								<div class="nav-placeholder"></div>
@@ -236,17 +243,17 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 				</div>
 			</div>
 		</div>
-		<Footer />
+		<Footer lang={lang} />
 
 		<!-- Lightbox 图片放大浮层 -->
 		<div class="lightbox-overlay" id="lightbox">
 			<div class="lightbox-window">
 				<div class="lightbox-title-bar">
-					<span class="lightbox-title-bar-text">图片预览</span>
-					<button class="lightbox-close-btn" id="lightbox-close" aria-label="关闭">×</button>
+					<span class="lightbox-title-bar-text">{t('lightbox.preview')}</span>
+					<button class="lightbox-close-btn" id="lightbox-close" aria-label={t('lightbox.close')}>×</button>
 				</div>
 				<div class="lightbox-body">
-					<img id="lightbox-img" src="" alt="放大图片" />
+					<img id="lightbox-img" src="" alt={t('lightbox.preview')} />
 				</div>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../consts';
+import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../../consts';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 
@@ -12,22 +12,23 @@ const parser = new MarkdownIt({
 
 export async function GET(context) {
 	const posts = (await getCollection('blog', ({ data }) => {
-		// 过滤掉草稿文章，只包含中文文章
-		return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
+		// Filter out drafts, only include English posts
+		return data.draft !== true && data.lang === 'en';
 	})).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-	
-	// 渲染每篇文章的完整内容
+
+	// Render full content for each post
 	const rssItems = await Promise.all(
 		posts.map(async (post) => {
 			const date = new Date(post.data.pubDate);
 			const year = date.getFullYear();
 			const month = (date.getMonth() + 1).toString().padStart(2, '0');
-			const slug = post.data.slug || post.id;
-			
-			// 将Markdown转换为HTML
+			// Remove 'en/' prefix from post.id for English posts
+			const slug = post.data.slug || post.id.replace(/^en\//, '');
+
+			// Convert Markdown to HTML
 			const html = parser.render(post.body);
-			
-			// 清理和净化HTML
+
+			// Sanitize HTML
 			const sanitizedHtml = sanitizeHtml(html, {
 				allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'audio']),
 				allowedAttributes: {
@@ -36,22 +37,22 @@ export async function GET(context) {
 					a: ['href', 'title', 'target'],
 				},
 			});
-			
+
 			return {
 				title: post.data.title,
 				description: post.data.description,
-				content: sanitizedHtml, // 使用渲染后的HTML内容
+				content: sanitizedHtml,
 				pubDate: post.data.pubDate,
-				link: `/${year}/${month}/${slug}/`,
+				link: `/en/${year}/${month}/${slug}/`,
 			};
 		})
 	);
-	
+
 	return rss({
-		title: SITE_TITLE_I18N.zh,
-		description: SITE_DESCRIPTION_I18N.zh,
+		title: SITE_TITLE_I18N.en,
+		description: SITE_DESCRIPTION_I18N.en,
 		site: context.site,
 		items: rssItems,
-		customData: `<language>zh-CN</language>`,
+		customData: `<language>en</language>`,
 	});
 }

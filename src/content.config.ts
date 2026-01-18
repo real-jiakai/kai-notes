@@ -14,6 +14,7 @@ const blog = defineCollection({
 		heroImage: z.union([image(), z.string()]).optional(), // 支持本地图片或远程URL
 		slug: z.string().optional(), // 自定义slug
 		draft: z.boolean().optional(), // 草稿标记
+		lang: z.enum(['zh', 'en']).optional(), // 文章语言，默认为中文
 	}),
 });
 

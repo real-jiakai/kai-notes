@@ -1,33 +1,33 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../consts';
+import BaseHead from '../../components/BaseHead.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../components/FormattedDate.astro';
-import { useTranslations } from '../i18n/utils';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { useTranslations } from '../../i18n/utils';
 
-const lang = 'zh';
+const lang = 'en';
 const t = useTranslations(lang);
 const SITE_TITLE = SITE_TITLE_I18N[lang];
 const SITE_DESCRIPTION = SITE_DESCRIPTION_I18N[lang];
 
 const posts = (await getCollection('blog', ({ data }) => {
-	// 过滤掉草稿文章，只显示中文文章
-	return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
+	// Filter out drafts, only show English posts
+	return data.draft !== true && data.lang === 'en';
 })).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-).slice(0, 10); // 只显示前10篇文章
+).slice(0, 10); // Only show first 10 posts
 
 const allPosts = await getCollection('blog', ({ data }) => {
-	// 过滤掉草稿文章，只显示中文文章
-	return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
+	// Filter out drafts, only show English posts
+	return data.draft !== true && data.lang === 'en';
 });
 const totalPages = Math.ceil(allPosts.length / 10);
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
@@ -36,7 +36,7 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				margin: 0;
 				padding: 0;
 			}
-			
+
 			body {
 				background: #c0c0c0;
 				font-family: 'MS Sans Serif', sans-serif;
@@ -44,7 +44,7 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				flex-direction: column;
 				min-height: 100vh;
 			}
-			
+
 			.desktop {
 				max-width: 800px;
 				margin: 0 auto;
@@ -53,24 +53,24 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				display: flex;
 				flex-direction: column;
 			}
-			
+
 			.window {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
 			}
-			
+
 			.window-body {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
 			}
-			
+
 			.article-list {
 				flex: 1;
 				margin-bottom: 20px;
 			}
-			
+
 			.article-item {
 				padding: 20px 30px;
 				border-bottom: 1px solid #808080;
@@ -79,11 +79,11 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				align-items: center;
 				margin-bottom: 8px;
 			}
-			
+
 			.article-item:last-child {
 				border-bottom: none;
 			}
-			
+
 			.article-title {
 				color: #000080;
 				text-decoration: none;
@@ -92,11 +92,11 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				font-size: 18px;
 				line-height: 1.5;
 			}
-			
+
 			.article-title:hover {
 				text-decoration: underline;
 			}
-			
+
 			.article-date {
 				color: #666666;
 				font-size: 14px;
@@ -104,12 +104,12 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				white-space: nowrap;
 				min-width: 120px;
 			}
-			
+
 			.pagination {
 				text-align: center;
 				margin-top: 20px;
 			}
-			
+
 			.pagination a,
 			.pagination span {
 				margin: 0 5px;
@@ -117,7 +117,7 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				text-decoration: none;
 				color: #000000;
 			}
-			
+
 			.pagination .current {
 				font-weight: bold;
 				background: #000080;
@@ -138,10 +138,11 @@ const totalPages = Math.ceil(allPosts.length / 10);
 							const date = new Date(post.data.pubDate);
 							const year = date.getFullYear();
 							const month = (date.getMonth() + 1).toString().padStart(2, '0');
+							const slug = post.data.slug || post.id.replace(/^en\//, '');
 
 							return (
 								<div class="article-item">
-									<a href={`/${year}/${month}/${post.data.slug || post.id}/`} class="article-title">
+									<a href={`/en/${year}/${month}/${slug}/`} class="article-title">
 										{post.data.title}
 									</a>
 									<span class="article-date">
@@ -156,10 +157,10 @@ const totalPages = Math.ceil(allPosts.length / 10);
 						<div class="pagination">
 							<span class="current">1</span>
 							{Array.from({ length: totalPages - 1 }, (_, i) => i + 2).map((pageNum) => (
-								<a href={`/${pageNum}/`}>{pageNum}</a>
+								<a href={`/en/${pageNum}/`}>{pageNum}</a>
 							))}
 							{totalPages > 1 && (
-								<a href="/2/" class="button">{t('pagination.next')}</a>
+								<a href="/en/2/" class="button">{t('pagination.next')}</a>
 							)}
 						</div>
 					)}
