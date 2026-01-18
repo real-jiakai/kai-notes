@@ -11,9 +11,9 @@
   "dependencies": {
     "98.css": "^0.1.21",
     "@astrojs/mdx": "^4.3.13",
-    "@astrojs/rss": "^4.0.14",
-    "@astrojs/sitemap": "^3.6.0",
-    "astro": "^5.16.6",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.0",
+    "astro": "^5.16.11",
     "markdown-it": "^14.1.0",
     "sanitize-html": "^2.17.0",
     "sharp": "^0.34.5"
