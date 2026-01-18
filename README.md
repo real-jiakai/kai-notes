@@ -1,6 +1,6 @@
-# MP Blog
+# Kai's Notes (凯记)
 
-This blog serves as a public mirror for articles published on WeChat Official Account. By maintaining a presence on the open web.
+A personal blog sharing knowledge about AI, personal projects, and personal growth. Supports both Chinese and English.
 
 # Acknowledgements
 
