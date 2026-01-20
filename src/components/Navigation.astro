@@ -24,22 +24,45 @@ const otherLang = lang === 'zh' ? 'en' : 'zh';
 const otherLangUrl = langUrls[otherLang];
 const otherLangName = languages[otherLang];
 const rssPath = lang === 'zh' ? '/rss.xml' : '/en/rss.xml';
+const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 ---
 
 <nav class="navigation">
 	<div class="nav-container">
+		<!-- Left: Title + Home + About -->
 		<div class="nav-left">
-			<span class="site-title">{siteTitle}</span>
+			<a href={homePath} class="site-title-link">
+				<span class="site-title">{siteTitle}</span>
+			</a>
+			<div class="nav-main desktop-only">
+				<a href={homePath} class="nav-link">{t('nav.home')}</a>
+				<a href={aboutPath} class="nav-link">{t('nav.about')}</a>
+			</div>
 		</div>
-		<div class="nav-center">
-			<a href={homePath} class="nav-link">{t('nav.home')}</a>
-			<a href={aboutPath} class="nav-link">{t('nav.about')}</a>
-		</div>
-		<div class="nav-right">
+
+		<!-- Right: GitHub, RSS, Language -->
+		<div class="nav-right desktop-only">
 			<a href="https://github.com/real-jiakai/kai-notes" class="nav-link" target="_blank">GitHub</a>
 			<a href={rssPath} class="nav-link">RSS</a>
 			<a href={otherLangUrl} class="nav-link">{otherLangName}</a>
 		</div>
+
+		<!-- Mobile hamburger button -->
+		<button class="hamburger mobile-only" id="hamburger-btn" aria-label={menuLabel}>
+			<span class="hamburger-line"></span>
+			<span class="hamburger-line"></span>
+			<span class="hamburger-line"></span>
+		</button>
+	</div>
+
+	<!-- Mobile menu dropdown -->
+	<div class="mobile-menu" id="mobile-menu">
+		<a href={homePath} class="mobile-nav-link">{t('nav.home')}</a>
+		<a href={aboutPath} class="mobile-nav-link">{t('nav.about')}</a>
+		<div class="mobile-menu-divider"></div>
+		<a href="https://github.com/real-jiakai/kai-notes" class="mobile-nav-link" target="_blank">GitHub</a>
+		<a href={rssPath} class="mobile-nav-link">RSS</a>
+		<a href={otherLangUrl} class="mobile-nav-link">{otherLangName}</a>
 	</div>
 </nav>
 
@@ -49,8 +72,9 @@ const rssPath = lang === 'zh' ? '/rss.xml' : '/en/rss.xml';
 		border-bottom: 2px solid #808080;
 		padding: 8px 0;
 		margin-bottom: 20px;
+		position: relative;
 	}
-	
+
 	.nav-container {
 		max-width: 800px;
 		margin: 0 auto;
@@ -59,29 +83,33 @@ const rssPath = lang === 'zh' ? '/rss.xml' : '/en/rss.xml';
 		justify-content: space-between;
 		align-items: center;
 	}
-	
+
 	.nav-left {
-		flex: 1;
-	}
-	
-	.nav-center {
 		display: flex;
+		align-items: center;
 		gap: 20px;
 	}
-	
-	.nav-right {
-		display: flex;
-		gap: 10px;
-		flex: 1;
-		justify-content: flex-end;
+
+	.site-title-link {
+		text-decoration: none;
 	}
-	
+
 	.site-title {
 		font-size: 20px;
 		font-weight: bold;
 		color: #000000;
 	}
-	
+
+	.nav-main {
+		display: flex;
+		gap: 10px;
+	}
+
+	.nav-right {
+		display: flex;
+		gap: 10px;
+	}
+
 	.nav-link {
 		color: #000000;
 		text-decoration: none;
@@ -91,13 +119,126 @@ const rssPath = lang === 'zh' ? '/rss.xml' : '/en/rss.xml';
 		display: inline-block;
 		font-size: 16px;
 	}
-	
+
 	.nav-link:hover {
 		border: 1px inset #c0c0c0;
 	}
-	
+
 	.nav-link.active {
 		border: 1px inset #c0c0c0;
 		background: #808080;
 	}
+
+	/* Hamburger button */
+	.hamburger {
+		display: none;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 28px;
+		height: 20px;
+		background: #c0c0c0;
+		border: 2px outset #c0c0c0;
+		padding: 4px;
+		cursor: pointer;
+	}
+
+	.hamburger:hover,
+	.hamburger.active {
+		border: 2px inset #c0c0c0;
+	}
+
+	.hamburger-line {
+		display: block;
+		width: 100%;
+		height: 2px;
+		background: #000000;
+	}
+
+	/* Mobile menu */
+	.mobile-menu {
+		display: none;
+		flex-direction: column;
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 0 12px;
+		overflow: hidden;
+		max-height: 0;
+		transition: max-height 0.2s ease-out;
+	}
+
+	.mobile-menu.open {
+		max-height: 300px;
+		padding-top: 10px;
+		padding-bottom: 5px;
+	}
+
+	.mobile-nav-link {
+		color: #000000;
+		text-decoration: none;
+		padding: 10px 12px;
+		border: 1px outset #c0c0c0;
+		background: #c0c0c0;
+		margin-bottom: 4px;
+		font-size: 14px;
+	}
+
+	.mobile-nav-link:hover {
+		border: 1px inset #c0c0c0;
+	}
+
+	.mobile-menu-divider {
+		height: 1px;
+		background: #808080;
+		margin: 8px 0;
+	}
+
+	/* Mobile/Desktop visibility */
+	.mobile-only {
+		display: none;
+	}
+
+	.desktop-only {
+		display: flex;
+	}
+
+	/* Mobile responsive */
+	@media (max-width: 600px) {
+		.nav-container {
+			padding: 0 12px;
+		}
+
+		.mobile-only {
+			display: flex;
+		}
+
+		.desktop-only {
+			display: none;
+		}
+
+		.mobile-menu {
+			display: flex;
+		}
+
+		.site-title {
+			font-size: 18px;
+		}
+	}
 </style>
+
+<script>
+	const hamburgerBtn = document.getElementById('hamburger-btn');
+	const mobileMenu = document.getElementById('mobile-menu');
+
+	hamburgerBtn?.addEventListener('click', () => {
+		hamburgerBtn.classList.toggle('active');
+		mobileMenu?.classList.toggle('open');
+	});
+
+	// Close menu when clicking a link
+	document.querySelectorAll('.mobile-nav-link').forEach(link => {
+		link.addEventListener('click', () => {
+			hamburgerBtn?.classList.remove('active');
+			mobileMenu?.classList.remove('open');
+		});
+	});
+</script>

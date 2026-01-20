@@ -4,6 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import BackToTop from '../components/BackToTop.astro';
 import { getLangFromUrl, useTranslations, getLocalePath } from '../i18n/utils';
 import type { Lang } from '../i18n/utils';
 
@@ -195,6 +196,65 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 			.nav-placeholder {
 				width: 200px;
 			}
+
+			/* Mobile responsive */
+			@media (max-width: 600px) {
+				.desktop {
+					padding: 0 12px;
+				}
+
+				.article-header {
+					padding: 12px;
+				}
+
+				.article-title {
+					font-size: 16px;
+				}
+
+				.article-content {
+					padding: 12px;
+				}
+
+				.article-content h1 {
+					font-size: 20px;
+				}
+
+				.article-content h2 {
+					font-size: 18px;
+				}
+
+				.article-content h3 {
+					font-size: 16px;
+				}
+
+				.article-content pre {
+					padding: 8px;
+					font-size: 11px;
+				}
+
+				.article-content blockquote {
+					padding-left: 10px;
+					margin: 10px 0;
+				}
+
+				.article-navigation {
+					flex-direction: column;
+					gap: 10px;
+					padding: 12px;
+				}
+
+				.nav-link {
+					max-width: none;
+					white-space: normal;
+					text-align: center;
+					font-size: 13px;
+					padding: 8px 12px;
+				}
+
+				.nav-placeholder {
+					display: none;
+				}
+			}
 		</style>
 	</head>
 
@@ -295,5 +355,7 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 				}
 			});
 		</script>
+
+		<BackToTop lang={lang} />
 	</body>
 </html>

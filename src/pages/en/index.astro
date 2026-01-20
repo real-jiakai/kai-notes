@@ -2,6 +2,7 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
+import BackToTop from '../../components/BackToTop.astro';
 import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -78,6 +79,7 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				justify-content: space-between;
 				align-items: center;
 				margin-bottom: 8px;
+				gap: 10px;
 			}
 
 			.article-item:last-child {
@@ -122,6 +124,43 @@ const totalPages = Math.ceil(allPosts.length / 10);
 				font-weight: bold;
 				background: #000080;
 				color: #ffffff;
+			}
+
+			/* Mobile responsive */
+			@media (max-width: 600px) {
+				.desktop {
+					padding: 0 12px;
+				}
+
+				.article-item {
+					flex-direction: column;
+					align-items: flex-start;
+					padding: 15px 12px;
+					gap: 6px;
+				}
+
+				.article-title {
+					font-size: 16px;
+				}
+
+				.article-date {
+					margin-left: 0;
+					min-width: auto;
+					font-size: 12px;
+				}
+
+				.pagination {
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: center;
+					gap: 4px;
+				}
+
+				.pagination a,
+				.pagination span {
+					margin: 0;
+					padding: 4px 8px;
+				}
 			}
 		</style>
 	</head>
@@ -168,5 +207,6 @@ const totalPages = Math.ceil(allPosts.length / 10);
 			</div>
 		</div>
 		<Footer lang={lang} />
+		<BackToTop lang={lang} />
 	</body>
 </html>

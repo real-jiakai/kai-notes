@@ -1,0 +1,92 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/utils';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang: propLang } = Astro.props;
+const lang = propLang || getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<button
+	id="back-to-top"
+	class="back-to-top"
+	aria-label={t('backToTop')}
+	title={t('backToTop')}
+>
+	↑
+</button>
+
+<style>
+	.back-to-top {
+		position: fixed;
+		bottom: 30px;
+		right: 30px;
+		width: 40px;
+		height: 40px;
+		padding: 0;
+		background: #c0c0c0;
+		border: 2px outset #c0c0c0;
+		color: #000080;
+		font-weight: bold;
+		font-size: 18px;
+		cursor: pointer;
+		z-index: 1000;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.2s, visibility 0.2s;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.back-to-top:hover {
+		border: 2px inset #c0c0c0;
+	}
+
+	.back-to-top:active {
+		border: 2px inset #c0c0c0;
+		background: #808080;
+	}
+
+	.back-to-top.visible {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	@media (max-width: 600px) {
+		.back-to-top {
+			bottom: 20px;
+			right: 15px;
+			width: 36px;
+			height: 36px;
+			font-size: 16px;
+		}
+	}
+</style>
+
+<script>
+	const backToTopButton = document.getElementById('back-to-top');
+
+	function toggleVisibility() {
+		if (window.scrollY > window.innerHeight) {
+			backToTopButton?.classList.add('visible');
+		} else {
+			backToTopButton?.classList.remove('visible');
+		}
+	}
+
+	// Check on scroll
+	window.addEventListener('scroll', toggleVisibility);
+
+	// Check on page load
+	toggleVisibility();
+
+	// Scroll to top on click
+	backToTopButton?.addEventListener('click', () => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	});
+</script>

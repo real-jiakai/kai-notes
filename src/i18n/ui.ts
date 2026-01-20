@@ -41,6 +41,9 @@ export const ui = {
 		// Lightbox
 		'lightbox.preview': '图片预览',
 		'lightbox.close': '关闭',
+
+		// Back to top
+		'backToTop': '返回顶部',
 	},
 	en: {
 		// Site
@@ -77,5 +80,8 @@ export const ui = {
 		// Lightbox
 		'lightbox.preview': 'Image Preview',
 		'lightbox.close': 'Close',
+
+		// Back to top
+		'backToTop': 'Back to Top',
 	},
 } as const;
