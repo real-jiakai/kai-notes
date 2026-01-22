@@ -197,6 +197,24 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 				width: 200px;
 			}
 
+			/* Comments section */
+			.article-comments {
+				margin-top: 20px;
+				padding: 15px;
+				border-top: 1px solid #808080;
+			}
+
+			.comments-title {
+				color: #000080;
+				font-size: 16px;
+				margin: 0 0 15px 0;
+			}
+
+			/* Utterances iframe styling */
+			.utterances {
+				max-width: 100% !important;
+			}
+
 			/* Mobile responsive */
 			@media (max-width: 600px) {
 				.desktop {
@@ -299,6 +317,19 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 								<div class="nav-placeholder"></div>
 							)}
 						</div>
+					</div>
+					<!-- Comments Section -->
+					<div class="article-comments">
+						<h3 class="comments-title">{t('comments.title')}</h3>
+						<script
+							src="https://utteranc.es/client.js"
+							repo="real-jiakai/kai-notes"
+							issue-term="pathname"
+							label="comment"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+						</script>
 					</div>
 				</div>
 			</div>

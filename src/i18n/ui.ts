@@ -42,6 +42,9 @@ export const ui = {
 		'lightbox.preview': '图片预览',
 		'lightbox.close': '关闭',
 
+		// Comments
+		'comments.title': '评论',
+
 		// Back to top
 		'backToTop': '返回顶部',
 	},
@@ -80,6 +83,9 @@ export const ui = {
 		// Lightbox
 		'lightbox.preview': 'Image Preview',
 		'lightbox.close': 'Close',
+
+		// Comments
+		'comments.title': 'Comments',
 
 		// Back to top
 		'backToTop': 'Back to Top',
