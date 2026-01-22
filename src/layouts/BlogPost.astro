@@ -314,6 +314,7 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 				</div>
 				<div class="lightbox-body">
 					<img id="lightbox-img" src="" alt={t('lightbox.preview')} />
+					<figcaption id="lightbox-caption" class="lightbox-caption"></figcaption>
 				</div>
 			</div>
 		</div>
@@ -322,6 +323,7 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 			// Lightbox 功能
 			const lightbox = document.getElementById('lightbox');
 			const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+			const lightboxCaption = document.getElementById('lightbox-caption');
 			const closeBtn = document.getElementById('lightbox-close');
 
 			// 为所有文章图片添加点击事件
@@ -329,7 +331,13 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 				img.addEventListener('click', (e) => {
 					const target = e.target as HTMLImageElement;
 					lightboxImg.src = target.src;
-					lightboxImg.alt = target.alt || '放大图片';
+					const altText = target.alt?.trim();
+					lightboxImg.alt = altText || '放大图片';
+					// Display alt text as caption
+					if (lightboxCaption) {
+						lightboxCaption.textContent = altText || '';
+						lightboxCaption.style.display = altText ? 'block' : 'none';
+					}
 					lightbox?.classList.add('active');
 				});
 			});

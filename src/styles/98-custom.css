@@ -167,7 +167,24 @@ body .desktop .window .window-body {
 .lightbox-body img {
   display: block;
   max-width: 85vw;
-  max-height: 80vh;
+  max-height: 75vh;
   object-fit: contain;
   border: 1px solid #808080;
+}
+
+/* Lightbox caption for alt text display */
+.lightbox-caption {
+  display: none;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #ffffcc;
+  border: 1px solid #808080;
+  box-shadow: inset 1px 1px #fff;
+  color: #000000;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 85vw;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
