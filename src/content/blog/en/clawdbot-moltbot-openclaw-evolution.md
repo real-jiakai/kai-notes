@@ -2,7 +2,6 @@
 title: "🦞 A Lobster's Rise: From Clawdbot to OpenClaw - What Did This AI Crustacean Go Through?"
 description: "From 0 to 100K stars in two months, legal notice from Anthropic, crypto scammers hijacking the brand - this open-source lobster's transformation is more dramatic than a TV series"
 pubDate: 'Jan 30 2026'
-slug: 'clawdbot-moltbot-openclaw-evolution'
 draft: false
 lang: 'en'
 ---
