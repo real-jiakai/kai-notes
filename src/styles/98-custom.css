@@ -86,9 +86,15 @@ body .desktop .window .window-body {
   margin: 12px;
 }
 
-/* Lightbox 图片放大功能样式 */
+/* 文章图片：限制高度避免占满整屏，与正文左对齐，点击可通过 Lightbox 放大 */
 .article-content img {
   cursor: zoom-in;
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  width: auto;
+  height: auto;
+  margin: 10px 0;
 }
 
 .lightbox-overlay {

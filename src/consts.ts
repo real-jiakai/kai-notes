@@ -15,3 +15,6 @@ export const SITE_DESCRIPTION_I18N = {
 	zh: '专注于分享AI、个人折腾、个人成长心得等方面的知识',
 	en: 'Sharing knowledge about AI, personal projects, and personal growth',
 } as const;
+
+// Number of posts per page in article lists
+export const POSTS_PER_PAGE = 5;
