@@ -1,6 +1,6 @@
 ---
 title: "DeepSeek V4 Shouldn't Be Overshadowed by GPT-5.5"
-description: "DeepSeek V4 Shouldn't Be Overshadowed by GPT-5.5"
+description: "GPT-5.5 stole the spotlight on launch day, but DeepSeek V4's 1M-token context recall and 1.6T-parameter open-source flagship deserve attention in their own right."
 pubDate: 'Apr 27 2026'
 lang: 'en'
 draft: false
