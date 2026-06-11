@@ -106,19 +106,51 @@ body .desktop .window .window-body {
   border-collapse: collapse;
   margin: 15px 0;
   font-size: 14px;
+  background: var(--content-bg);
 }
 
 .article-content th,
 .article-content td {
-  border: 1px solid #808080;
+  border: 1px solid var(--border);
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
-  background: #ffffff;
+  background: var(--content-bg);
 }
 
 .article-content th {
-  background: #c0c0c0;
+  background: var(--surface);
+  /* 覆盖 /98.css 中 thead 单元格的浅色立体边框 */
+  box-shadow: inset -1px -1px var(--bevel-dark-outer), inset 1px 1px var(--bevel-light-outer), inset -2px -2px var(--bevel-dark), inset 2px 2px var(--bevel-light);
+}
+
+/* 文章 Markdown 内容着色：slot 渲染的 Markdown 不带 Astro scope 属性，
+   组件内 scoped 规则匹配不到，必须用全局规则（同上方表格规则）。
+   只管颜色；字号/间距维持 global.css 的现状渲染。 */
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+  color: var(--heading);
+}
+
+.article-content a {
+  color: var(--link);
+}
+
+.article-content a:hover {
+  color: var(--link-hover);
+}
+
+.article-content blockquote {
+  border-left-color: var(--border);
+  color: var(--text-secondary);
+}
+
+.article-content code {
+  background-color: var(--code-bg);
 }
 
 @media (max-width: 600px) {
@@ -150,18 +182,18 @@ body .desktop .window .window-body {
 }
 
 .lightbox-window {
-  background: #c0c0c0;
+  background: var(--surface);
   max-width: 90vw;
   max-height: 90vh;
   box-shadow:
-    inset -1px -1px #0a0a0a,
-    inset 1px 1px #dfdfdf,
-    inset -2px -2px grey,
-    inset 2px 2px #fff;
+    inset -1px -1px var(--bevel-dark-outer),
+    inset 1px 1px var(--bevel-light),
+    inset -2px -2px var(--bevel-dark),
+    inset 2px 2px var(--bevel-light-outer);
 }
 
 .lightbox-title-bar {
-  background: linear-gradient(90deg, #000080, #1084d0);
+  background: linear-gradient(90deg, var(--titlebar-1), var(--titlebar-2));
   padding: 3px 2px 3px 3px;
   display: flex;
   justify-content: space-between;
@@ -183,26 +215,27 @@ body .desktop .window .window-body {
   font-size: 10px;
   line-height: 1;
   font-weight: bold;
-  background: #c0c0c0;
+  background: var(--surface);
+  color: var(--text);
   border: none;
   box-shadow:
-    inset -1px -1px #0a0a0a,
-    inset 1px 1px #fff,
-    inset -2px -2px grey,
-    inset 2px 2px #dfdfdf;
+    inset -1px -1px var(--bevel-dark-outer),
+    inset 1px 1px var(--bevel-light-outer),
+    inset -2px -2px var(--bevel-dark),
+    inset 2px 2px var(--bevel-light);
 }
 
 .lightbox-close-btn:active {
   box-shadow:
-    inset -1px -1px #fff,
-    inset 1px 1px #0a0a0a,
-    inset -2px -2px #dfdfdf,
-    inset 2px 2px grey;
+    inset -1px -1px var(--bevel-light-outer),
+    inset 1px 1px var(--bevel-dark-outer),
+    inset -2px -2px var(--bevel-light),
+    inset 2px 2px var(--bevel-dark);
 }
 
 .lightbox-body {
   padding: 4px;
-  background: #c0c0c0;
+  background: var(--surface);
 }
 
 .lightbox-body img {
@@ -210,7 +243,7 @@ body .desktop .window .window-body {
   max-width: 85vw;
   max-height: 75vh;
   object-fit: contain;
-  border: 1px solid #808080;
+  border: 1px solid var(--border);
 }
 
 /* Lightbox caption for alt text display */
@@ -218,10 +251,10 @@ body .desktop .window .window-body {
   display: none;
   margin-top: 8px;
   padding: 8px 12px;
-  background: #ffffcc;
-  border: 1px solid #808080;
-  box-shadow: inset 1px 1px #fff;
-  color: #000000;
+  background: var(--tooltip-bg);
+  border: 1px solid var(--border);
+  box-shadow: inset 1px 1px var(--bevel-light-outer);
+  color: var(--tooltip-text);
   font-size: 14px;
   line-height: 1.4;
   text-align: center;
