@@ -1,0 +1,129 @@
+/* Win98 主题变量：:root 为浅色（与现状一致），html[data-theme="dark"] 为 High Contrast Black。
+   设计文档：docs/superpowers/specs/2026-06-11-dark-mode-design.md */
+:root {
+  color-scheme: light;
+  --desktop: #c0c0c0;
+  --surface: #c0c0c0;
+  --text: #000000;
+  --text-secondary: #404040;
+  --text-muted: #666666;
+  --heading: #000080;
+  --link: #000080;
+  --link-hover: #0000ff;
+  --bevel-dark-outer: #0a0a0a;
+  --bevel-dark: #808080;
+  --bevel-light: #dfdfdf;
+  --bevel-light-outer: #ffffff;
+  --border: #808080;
+  --content-bg: #ffffff;
+  --code-bg: #f0f0f0;
+  --tooltip-bg: #ffffcc;
+  --tooltip-text: #000000;
+  --titlebar-1: #000080;
+  --titlebar-2: #1084d0;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --desktop: #000000;
+  --surface: #000000;
+  --text: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #999999;
+  --heading: #ffffff;
+  --link: #5ad1ff;
+  --link-hover: #8ee0ff;
+  --bevel-dark-outer: #000000;
+  --bevel-dark: #444444;
+  --bevel-light: #aaaaaa;
+  --bevel-light-outer: #ffffff;
+  --border: #666666;
+  --content-bg: #0d0d0d;
+  --code-bg: #121212;
+  --tooltip-bg: #1a1a00;
+  --tooltip-text: #ffff99;
+  /* 标题栏渐变在两种模式下保持一致（设计决定） */
+}
+
+/* ===== 98.css 重新着色 =====
+   /public/98.css（v0.1.21）不含变量，只能覆盖。`html` 前缀让这些规则
+   无论加载顺序如何都胜过 /98.css 的单元素选择器。
+   覆盖站点使用的框架规则；表格单元格由 98-custom.css 负责。 */
+html body {
+  color: var(--text);
+}
+
+/* 98.css 用 color:transparent + text-shadow 渲染按钮文字（像素风），
+   重新着色时只换底色与 shadow 颜色 */
+html button,
+html input[type='reset'],
+html input[type='submit'] {
+  background: var(--surface);
+  text-shadow: 0 0 var(--text);
+  box-shadow:
+    inset -1px -1px var(--bevel-dark-outer),
+    inset 1px 1px var(--bevel-light-outer),
+    inset -2px -2px var(--bevel-dark),
+    inset 2px 2px var(--bevel-light);
+}
+
+html button:not(:disabled):active,
+html input[type='reset']:not(:disabled):active,
+html input[type='submit']:not(:disabled):active {
+  box-shadow:
+    inset -1px -1px var(--bevel-light-outer),
+    inset 1px 1px var(--bevel-dark-outer),
+    inset -2px -2px var(--bevel-light),
+    inset 2px 2px var(--bevel-dark);
+  text-shadow: 1px 1px var(--text);
+}
+
+html pre {
+  background: var(--code-bg);
+  box-shadow:
+    inset -1px -1px var(--bevel-light-outer),
+    inset 1px 1px var(--bevel-dark),
+    inset -2px -2px var(--bevel-light),
+    inset 2px 2px var(--bevel-dark-outer);
+}
+
+html .window {
+  background: var(--surface);
+  box-shadow:
+    inset -1px -1px var(--bevel-dark-outer),
+    inset 1px 1px var(--bevel-light),
+    inset -2px -2px var(--bevel-dark),
+    inset 2px 2px var(--bevel-light-outer);
+}
+
+html .title-bar {
+  background: linear-gradient(90deg, var(--titlebar-1), var(--titlebar-2));
+}
+
+/* 站点上所有可见链接都有专门样式；此规则统一裸链接颜色（浅色仍为 navy 系） */
+html a {
+  color: var(--link);
+}
+
+/* 深色滚动条：WebKit 的轨道纹理是 SVG data-URI（无法用变量），改为纯色 */
+html[data-theme='dark'] {
+  scrollbar-color: #333333 #1a1a1a;
+}
+html[data-theme='dark'] ::-webkit-scrollbar-track {
+  background-image: none;
+  background-color: #1a1a1a;
+}
+html[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background-color: #2b2b2b;
+  box-shadow:
+    inset -1px -1px var(--bevel-dark-outer),
+    inset 1px 1px var(--bevel-light-outer),
+    inset -2px -2px var(--bevel-dark),
+    inset 2px 2px var(--bevel-light);
+}
+
+/* 深色下文章图片与灯箱图片轻微调暗，避免纯黑背景上刺眼 */
+html[data-theme='dark'] .article-content img,
+html[data-theme='dark'] .lightbox-body img {
+  filter: brightness(0.9);
+}
