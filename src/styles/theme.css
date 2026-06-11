@@ -36,7 +36,7 @@ html[data-theme='dark'] {
   --bevel-dark-outer: #000000;
   --bevel-dark: #444444;
   --bevel-light: #aaaaaa;
-  --bevel-light-outer: #ffffff;
+  --bevel-light-outer: #ffffff; /* 深色下刻意保持纯白：保留 Win98 立体高光 */
   --border: #666666;
   --content-bg: #0d0d0d;
   --code-bg: #121212;
@@ -114,12 +114,15 @@ html[data-theme='dark'] ::-webkit-scrollbar-track {
   background-color: #1a1a1a;
 }
 html[data-theme='dark'] ::-webkit-scrollbar-thumb {
-  background-color: #2b2b2b;
+  background-color: #505050;
   box-shadow:
     inset -1px -1px var(--bevel-dark-outer),
     inset 1px 1px var(--bevel-light-outer),
     inset -2px -2px var(--bevel-dark),
     inset 2px 2px var(--bevel-light);
+}
+html[data-theme='dark'] ::-webkit-scrollbar-corner {
+  background-color: #1a1a1a;
 }
 
 /* 深色下文章图片与灯箱图片轻微调暗，避免纯黑背景上刺眼 */
