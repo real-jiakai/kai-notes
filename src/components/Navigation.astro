@@ -136,6 +136,12 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		background: var(--bevel-dark);
 	}
 
+	.nav-link:focus,
+	.mobile-nav-link:focus {
+		outline: 1px dotted var(--text);
+		outline-offset: -3px;
+	}
+
 	/* 主题切换按钮：中和 98.css 的 button 外观，与 .nav-link 一致 */
 	button.theme-toggle {
 		font-family: inherit;
