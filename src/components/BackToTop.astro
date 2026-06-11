@@ -28,9 +28,10 @@ const t = useTranslations(lang);
 		width: 40px;
 		height: 40px;
 		padding: 0;
-		background: #c0c0c0;
-		border: 2px outset #c0c0c0;
-		color: #000080;
+		background: var(--surface);
+		border: 2px solid transparent;
+		box-shadow: inset -1px -1px var(--bevel-dark-outer), inset 1px 1px var(--bevel-light-outer), inset -2px -2px var(--bevel-dark), inset 2px 2px var(--bevel-light);
+		color: var(--heading);
 		font-weight: bold;
 		font-size: 18px;
 		cursor: pointer;
@@ -44,12 +45,12 @@ const t = useTranslations(lang);
 	}
 
 	.back-to-top:hover {
-		border: 2px inset #c0c0c0;
+		box-shadow: inset -1px -1px var(--bevel-light-outer), inset 1px 1px var(--bevel-dark-outer), inset -2px -2px var(--bevel-light), inset 2px 2px var(--bevel-dark);
 	}
 
 	.back-to-top:active {
-		border: 2px inset #c0c0c0;
-		background: #808080;
+		box-shadow: inset -1px -1px var(--bevel-light-outer), inset 1px 1px var(--bevel-dark-outer), inset -2px -2px var(--bevel-light), inset 2px 2px var(--bevel-dark);
+		background: var(--bevel-dark);
 	}
 
 	.back-to-top.visible {

@@ -74,8 +74,8 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 
 <style>
 	.navigation {
-		background: #c0c0c0;
-		border-bottom: 2px solid #808080;
+		background: var(--surface);
+		border-bottom: 2px solid var(--border);
 		padding: 8px 0;
 		margin-bottom: 20px;
 		position: relative;
@@ -103,7 +103,7 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 	.site-title {
 		font-size: 20px;
 		font-weight: bold;
-		color: #000000;
+		color: var(--text);
 	}
 
 	.nav-main {
@@ -117,22 +117,23 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 	}
 
 	.nav-link {
-		color: #000000;
+		color: var(--text);
 		text-decoration: none;
 		padding: 4px 12px;
-		border: 1px outset #c0c0c0;
-		background: #c0c0c0;
+		border: 1px solid transparent;
+		background: var(--surface);
 		display: inline-block;
 		font-size: 16px;
+		box-shadow: inset -1px -1px var(--bevel-dark-outer), inset 1px 1px var(--bevel-light-outer);
 	}
 
 	.nav-link:hover {
-		border: 1px inset #c0c0c0;
+		box-shadow: inset -1px -1px var(--bevel-light-outer), inset 1px 1px var(--bevel-dark-outer);
 	}
 
 	.nav-link.active {
-		border: 1px inset #c0c0c0;
-		background: #808080;
+		box-shadow: inset -1px -1px var(--bevel-light-outer), inset 1px 1px var(--bevel-dark-outer);
+		background: var(--bevel-dark);
 	}
 
 	/* 主题切换按钮：中和 98.css 的 button 外观，与 .nav-link 一致 */
@@ -168,22 +169,23 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		justify-content: space-between;
 		width: 28px;
 		height: 20px;
-		background: #c0c0c0;
-		border: 2px outset #c0c0c0;
+		background: var(--surface);
+		border: 2px solid transparent;
 		padding: 4px;
 		cursor: pointer;
+		box-shadow: inset -1px -1px var(--bevel-dark-outer), inset 1px 1px var(--bevel-light-outer), inset -2px -2px var(--bevel-dark), inset 2px 2px var(--bevel-light);
 	}
 
 	.hamburger:hover,
 	.hamburger.active {
-		border: 2px inset #c0c0c0;
+		box-shadow: inset -1px -1px var(--bevel-light-outer), inset 1px 1px var(--bevel-dark-outer), inset -2px -2px var(--bevel-light), inset 2px 2px var(--bevel-dark);
 	}
 
 	.hamburger-line {
 		display: block;
 		width: 100%;
 		height: 2px;
-		background: #000000;
+		background: var(--text);
 	}
 
 	/* Mobile menu */
@@ -205,22 +207,23 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 	}
 
 	.mobile-nav-link {
-		color: #000000;
+		color: var(--text);
 		text-decoration: none;
 		padding: 10px 12px;
-		border: 1px outset #c0c0c0;
-		background: #c0c0c0;
+		border: 1px solid transparent;
+		background: var(--surface);
 		margin-bottom: 4px;
 		font-size: 14px;
+		box-shadow: inset -1px -1px var(--bevel-dark-outer), inset 1px 1px var(--bevel-light-outer);
 	}
 
 	.mobile-nav-link:hover {
-		border: 1px inset #c0c0c0;
+		box-shadow: inset -1px -1px var(--bevel-light-outer), inset 1px 1px var(--bevel-dark-outer);
 	}
 
 	.mobile-menu-divider {
 		height: 1px;
-		background: #808080;
+		background: var(--border);
 		margin: 8px 0;
 	}
 
