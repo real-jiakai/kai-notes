@@ -14,6 +14,7 @@ export const ui = {
 		// Navigation
 		'nav.home': '首页',
 		'nav.about': '关于',
+		'theme.toggle': '切换深色/浅色模式',
 
 		// Footer
 		'footer.copyright': '版权所有',
@@ -56,6 +57,7 @@ export const ui = {
 		// Navigation
 		'nav.home': 'Home',
 		'nav.about': 'About',
+		'theme.toggle': 'Toggle dark/light mode',
 
 		// Footer
 		'footer.copyright': 'All rights reserved',

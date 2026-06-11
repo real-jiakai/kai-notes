@@ -45,6 +45,9 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 			<a href="https://github.com/real-jiakai/kai-notes" class="nav-link" target="_blank">GitHub</a>
 			<a href={rssPath} class="nav-link">RSS</a>
 			<a href={otherLangUrl} class="nav-link">{otherLangName}</a>
+			<button class="nav-link theme-toggle" aria-label={t('theme.toggle')} title={t('theme.toggle')}>
+				<span class="theme-toggle-icon">🌙</span>
+			</button>
 		</div>
 
 		<!-- Mobile hamburger button -->
@@ -63,6 +66,9 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		<a href="https://github.com/real-jiakai/kai-notes" class="mobile-nav-link" target="_blank">GitHub</a>
 		<a href={rssPath} class="mobile-nav-link">RSS</a>
 		<a href={otherLangUrl} class="mobile-nav-link">{otherLangName}</a>
+		<button class="mobile-nav-link theme-toggle" aria-label={t('theme.toggle')}>
+			<span class="theme-toggle-icon">🌙</span> {t('theme.toggle')}
+		</button>
 	</div>
 </nav>
 
@@ -127,6 +133,27 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 	.nav-link.active {
 		border: 1px inset #c0c0c0;
 		background: #808080;
+	}
+
+	/* 主题切换按钮：中和 98.css 的 button 外观，与 .nav-link 一致 */
+	button.theme-toggle {
+		font-family: inherit;
+		min-width: 0;
+		min-height: 0;
+		box-shadow: none;
+		text-shadow: none;
+		cursor: pointer;
+		line-height: inherit;
+	}
+
+	button.theme-toggle:focus {
+		outline: 1px dotted var(--text, #000);
+		outline-offset: -3px;
+	}
+
+	.mobile-menu button.theme-toggle {
+		text-align: left;
+		width: 100%;
 	}
 
 	/* Hamburger button */
@@ -235,10 +262,42 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 	});
 
 	// Close menu when clicking a link
-	document.querySelectorAll('.mobile-nav-link').forEach(link => {
+	document.querySelectorAll('a.mobile-nav-link').forEach(link => {
 		link.addEventListener('click', () => {
 			hamburgerBtn?.classList.remove('active');
 			mobileMenu?.classList.remove('open');
 		});
 	});
+
+	// 主题切换：翻转 data-theme，持久化，更新图标/theme-color，同步 utterances
+	function currentTheme() {
+		return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+	}
+
+	function applyThemeIcon() {
+		const icon = currentTheme() === 'dark' ? '☀️' : '🌙';
+		document.querySelectorAll('.theme-toggle .theme-toggle-icon').forEach(el => {
+			el.textContent = icon;
+		});
+	}
+
+	document.querySelectorAll('.theme-toggle').forEach(btn => {
+		btn.addEventListener('click', () => {
+			const next = currentTheme() === 'dark' ? 'light' : 'dark';
+			document.documentElement.dataset.theme = next;
+			try {
+				localStorage.setItem('theme', next);
+			} catch (e) {}
+			const meta = document.querySelector('meta[name="theme-color"]');
+			if (meta) meta.setAttribute('content', next === 'dark' ? '#000000' : '#c0c0c0');
+			applyThemeIcon();
+			const frame = document.querySelector('iframe.utterances-frame') as HTMLIFrameElement | null;
+			frame?.contentWindow?.postMessage(
+				{ type: 'set-theme', theme: next === 'dark' ? 'github-dark' : 'github-light' },
+				'https://utteranc.es'
+			);
+		});
+	});
+
+	applyThemeIcon();
 </script>
