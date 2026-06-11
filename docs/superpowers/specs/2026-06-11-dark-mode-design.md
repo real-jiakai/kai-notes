@@ -169,3 +169,19 @@ so already-loaded comments flip live.
 
 No test infrastructure exists in the repo. Verification is `pnpm build` plus a manual /
 Playwright-driven pass over the acceptance criteria in both themes and both languages.
+
+## Addendum (2026-06-11, during execution)
+
+Task 1's code review uncovered a latent bug that amends the "Component refactor" section
+and acceptance criterion 4: Astro scopes component styles by appending
+`[data-astro-cid-*]` to every selector element, and slot-rendered Markdown carries no
+such attribute. All `.article-content <element>` rules in `BlogPost.astro` (headings,
+links, code, blockquote, img) have therefore never applied — articles actually rendered
+with `global.css` colors (near-black headings, `#2337ff` links).
+
+Resolution: those dead scoped rules are deleted; their color-bearing replacements live
+as global rules in `98-custom.css` (the same proven pattern as the table/img rules
+there). Light-mode article Markdown consequently *changes* to the approved palette
+(navy headings/links) — realizing the design these styles always intended — while
+typography/spacing keeps the current `global.css` rendering. "Pixel-identical light
+mode" applies to everything else.
