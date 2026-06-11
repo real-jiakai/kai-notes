@@ -45,8 +45,8 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 			<a href="https://github.com/real-jiakai/kai-notes" class="nav-link" target="_blank">GitHub</a>
 			<a href={rssPath} class="nav-link">RSS</a>
 			<a href={otherLangUrl} class="nav-link">{otherLangName}</a>
-			<button class="nav-link theme-toggle" aria-label={t('theme.toggle')} title={t('theme.toggle')}>
-				<span class="theme-toggle-icon">🌙</span>
+			<button class="nav-link theme-toggle" aria-label={t('theme.toggle')} title={t('theme.toggle')} aria-pressed="false">
+				<span class="theme-toggle-icon" aria-hidden="true">🌙</span>
 			</button>
 		</div>
 
@@ -66,8 +66,8 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		<a href="https://github.com/real-jiakai/kai-notes" class="mobile-nav-link" target="_blank">GitHub</a>
 		<a href={rssPath} class="mobile-nav-link">RSS</a>
 		<a href={otherLangUrl} class="mobile-nav-link">{otherLangName}</a>
-		<button class="mobile-nav-link theme-toggle" aria-label={t('theme.toggle')}>
-			<span class="theme-toggle-icon">🌙</span> {t('theme.toggle')}
+		<button class="mobile-nav-link theme-toggle" aria-label={t('theme.toggle')} aria-pressed="false">
+			<span class="theme-toggle-icon" aria-hidden="true">🌙</span> {t('theme.toggle')}
 		</button>
 	</div>
 </nav>
@@ -151,6 +151,11 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		outline-offset: -3px;
 	}
 
+	button.theme-toggle:active {
+		box-shadow: none;
+		text-shadow: none;
+	}
+
 	.mobile-menu button.theme-toggle {
 		text-align: left;
 		width: 100%;
@@ -194,7 +199,7 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 	}
 
 	.mobile-menu.open {
-		max-height: 300px;
+		max-height: 340px;
 		padding-top: 10px;
 		padding-bottom: 5px;
 	}
@@ -274,10 +279,12 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 	}
 
-	function applyThemeIcon() {
-		const icon = currentTheme() === 'dark' ? '☀️' : '🌙';
-		document.querySelectorAll('.theme-toggle .theme-toggle-icon').forEach(el => {
-			el.textContent = icon;
+	function applyThemeState() {
+		const dark = currentTheme() === 'dark';
+		document.querySelectorAll('.theme-toggle').forEach(btn => {
+			btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+			const icon = btn.querySelector('.theme-toggle-icon');
+			if (icon) icon.textContent = dark ? '☀️' : '🌙';
 		});
 	}
 
@@ -290,7 +297,7 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 			} catch (e) {}
 			const meta = document.querySelector('meta[name="theme-color"]');
 			if (meta) meta.setAttribute('content', next === 'dark' ? '#000000' : '#c0c0c0');
-			applyThemeIcon();
+			applyThemeState();
 			const frame = document.querySelector('iframe.utterances-frame') as HTMLIFrameElement | null;
 			frame?.contentWindow?.postMessage(
 				{ type: 'set-theme', theme: next === 'dark' ? 'github-dark' : 'github-light' },
@@ -299,5 +306,18 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		});
 	});
 
-	applyThemeIcon();
+	applyThemeState();
+
+	// bfcache 恢复时重新同步主题（用户可能在其它页面切换过）
+	window.addEventListener('pageshow', (e) => {
+		if (!e.persisted) return;
+		let saved = null;
+		try {
+			saved = localStorage.getItem('theme');
+		} catch (err) {}
+		if (saved === 'dark' || saved === 'light') {
+			document.documentElement.dataset.theme = saved;
+		}
+		applyThemeState();
+	});
 </script>
