@@ -97,6 +97,41 @@ body .desktop .window .window-body {
   margin: 10px 0;
 }
 
+/* 文章表格：98 风格边框；超宽时在表格内部横向滚动，避免撑破布局 */
+.article-content table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.article-content th,
+.article-content td {
+  border: 1px solid #808080;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  background: #ffffff;
+}
+
+.article-content th {
+  background: #c0c0c0;
+}
+
+@media (max-width: 600px) {
+  .article-content table {
+    font-size: 13px;
+  }
+
+  .article-content th,
+  .article-content td {
+    padding: 4px 8px;
+  }
+}
+
 .lightbox-overlay {
   display: none;
   position: fixed;

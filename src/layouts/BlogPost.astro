@@ -49,17 +49,23 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 			}
 			
 			.desktop {
-				max-width: 800px;
+				/* 显式宽度：避免按内容固有宽度收缩适配（margin auto 会禁用 flex stretch），
+				   否则宽表格等内容会把不同语言的页面撑成不同宽度 */
+				width: 100%;
+				box-sizing: border-box;
+				max-width: 840px; /* 800px 内容 + 40px padding */
 				margin: 0 auto;
 				padding: 0 20px;
 				flex: 1;
-				display: flex
+				display: flex;
+				min-width: 0;
 			}
-			
+
 			.window {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
+				min-width: 0;
 			}
 			
 			.window-body {
