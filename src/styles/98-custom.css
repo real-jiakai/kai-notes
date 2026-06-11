@@ -138,6 +138,7 @@ body .desktop .window .window-body {
 
 .article-content a {
   color: var(--link);
+  text-decoration: underline;
 }
 
 .article-content a:hover {
@@ -149,7 +150,7 @@ body .desktop .window .window-body {
   color: var(--text-secondary);
 }
 
-.article-content code {
+.article-content :not(pre) > code {
   background-color: var(--code-bg);
 }
 
