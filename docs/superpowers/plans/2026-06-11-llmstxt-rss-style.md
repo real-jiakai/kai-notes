@@ -309,9 +309,11 @@ Expected output (post lines follow after):
 - [ ] **Step 3.3: Cross-check every feed post URL appears in llms.txt**
 
 ```bash
-sed 's/<\/\?link>//g' /tmp/feed-baseline/zh-links.txt | grep '/20' | while read u; do grep -qF "($u)" dist/llms.txt || echo "MISSING: $u"; done; echo zh-check-done
-sed 's/<\/\?link>//g' /tmp/feed-baseline/en-links.txt | grep '/20' | while read u; do grep -qF "($u)" dist/llms.txt || echo "MISSING: $u"; done; echo en-check-done
+sed -E 's|</?link>||g' /tmp/feed-baseline/zh-links.txt | grep '/20' | while read u; do grep -qF "($u)" dist/llms.txt || echo "MISSING: $u"; done; echo zh-check-done
+sed -E 's|</?link>||g' /tmp/feed-baseline/en-links.txt | grep '/20' | while read u; do grep -qF "($u)" dist/llms.txt || echo "MISSING: $u"; done; echo en-check-done
 ```
+
+(Note: `-E` is required — BSD sed on macOS rejects `\?` in basic regex, silently leaving tags unstripped.)
 
 (`grep '/20'` keeps only post URLs — they contain `/20xx/` — and drops the channel home link.)
 
