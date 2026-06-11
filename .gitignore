@@ -30,3 +30,6 @@ images/
 
 # superpowers brainstorm sessions
 .superpowers/
+
+# vercel project linking (site deploys via netlify)
+.vercel/
