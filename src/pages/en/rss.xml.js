@@ -1,4 +1,4 @@
-import rss from '@astrojs/rss';
+import { getRssString } from '@astrojs/rss';
 import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../../consts';
 import { getPublishedPosts, getPostPath } from '../../utils/posts';
 import MarkdownIt from 'markdown-it';
@@ -9,6 +9,10 @@ const parser = new MarkdownIt({
 	breaks: true,
 	linkify: true,
 });
+
+// Renders a Win98 preview page when the feed is opened in a browser;
+// feed readers ignore this XHTML-namespaced element.
+const FEED_STYLE_SCRIPT = '<script src="/feed-style.js" xmlns="http://www.w3.org/1999/xhtml"></script>';
 
 export async function GET(context) {
 	const posts = await getPublishedPosts('en');
@@ -39,11 +43,19 @@ export async function GET(context) {
 		})
 	);
 
-	return rss({
+	const rssString = await getRssString({
 		title: SITE_TITLE_I18N.en,
 		description: SITE_DESCRIPTION_I18N.en,
 		site: context.site,
 		items: rssItems,
-		customData: `<language>en</language>`,
+		xmlns: { atom: 'http://www.w3.org/2005/Atom' },
+		customData: [
+			'<language>en</language>',
+			`<atom:link href="${new URL('en/rss.xml', context.site).href}" rel="self" type="application/rss+xml"/>`,
+		].join(''),
+	});
+
+	return new Response(rssString.replace('<channel>', `${FEED_STYLE_SCRIPT}<channel>`), {
+		headers: { 'Content-Type': 'application/xml; charset=utf-8' },
 	});
 }
