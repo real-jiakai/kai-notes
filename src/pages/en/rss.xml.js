@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
 import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N } from '../../consts';
+import { getPublishedPosts, getPostPath } from '../../utils/posts';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 
@@ -11,20 +11,11 @@ const parser = new MarkdownIt({
 });
 
 export async function GET(context) {
-	const posts = (await getCollection('blog', ({ data }) => {
-		// Filter out drafts, only include English posts
-		return data.draft !== true && data.lang === 'en';
-	})).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	const posts = await getPublishedPosts('en');
 
 	// Render full content for each post
 	const rssItems = await Promise.all(
 		posts.map(async (post) => {
-			const date = new Date(post.data.pubDate);
-			const year = date.getFullYear();
-			const month = (date.getMonth() + 1).toString().padStart(2, '0');
-			// Remove 'en/' prefix from post.id for English posts
-			const slug = post.data.slug || post.id.replace(/^en\//, '');
-
 			// Convert Markdown to HTML
 			const html = parser.render(post.body);
 
@@ -43,7 +34,7 @@ export async function GET(context) {
 				description: post.data.description,
 				content: sanitizedHtml,
 				pubDate: post.data.pubDate,
-				link: `/en/${year}/${month}/${slug}/`,
+				link: getPostPath(post),
 			};
 		})
 	);
