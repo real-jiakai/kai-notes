@@ -29,6 +29,23 @@ const { title, description } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
+<!-- 主题初始化：在样式表加载前确定 data-theme，避免错误主题闪烁（FOUC） -->
+<meta name="theme-color" content="#c0c0c0" />
+<script is:inline>
+	(function () {
+		var theme = null;
+		try {
+			theme = localStorage.getItem('theme');
+		} catch (e) {}
+		if (theme !== 'light' && theme !== 'dark') {
+			theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		document.documentElement.dataset.theme = theme;
+		var meta = document.querySelector('meta[name="theme-color"]');
+		if (meta) meta.setAttribute('content', theme === 'dark' ? '#000000' : '#c0c0c0');
+	})();
+</script>
+
 <!-- 98.css Framework -->
 <link rel="stylesheet" href="/98.css" />
 
