@@ -142,6 +142,11 @@ so already-loaded comments flip live.
 - **RSS / sitemap:** untouched (no HTML styling involved).
 - **Lightbox overlay:** already dark (`rgba(0,0,0,.7)`); its window chrome follows the
   variables like everything else.
+- **Known limitation (accepted):** toggling within the first ~1–3s of an article page
+  load — before the utterances iframe finishes loading — leaves the comments widget on
+  the injection-time theme until the next toggle or reload. Below the fold and
+  self-correcting; fix if ever needed: re-send `set-theme` on utterances' first `resize`
+  message.
 
 ## Out of scope
 
