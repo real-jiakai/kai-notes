@@ -186,7 +186,8 @@ with `global.css` colors (near-black headings, `#2337ff` links).
 
 Resolution: those dead scoped rules are deleted; their color-bearing replacements live
 as global rules in `98-custom.css` (the same proven pattern as the table/img rules
-there). Light-mode article Markdown consequently *changes* to the approved palette
-(navy headings/links) — realizing the design these styles always intended — while
-typography/spacing keeps the current `global.css` rendering. "Pixel-identical light
-mode" applies to everything else.
+there). Light-mode article Markdown consequently *changes* to the approved palette —
+navy headings/links, gray blockquote border (`#2337ff` → `#808080`) with `#404040`
+text, and inline-code background `rgb(229,233,240)` → `#f0f0f0` — realizing the design
+these styles always intended — while typography/spacing keeps the current `global.css`
+rendering. "Pixel-identical light mode" applies to everything else.
