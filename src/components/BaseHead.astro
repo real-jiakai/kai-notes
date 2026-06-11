@@ -3,7 +3,6 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import '../styles/98-custom.css';
-import '../styles/theme.css';
 import { SITE_TITLE } from '../consts';
 
 interface Props {
@@ -48,6 +47,8 @@ const { title, description } = Astro.props;
 
 <!-- 98.css Framework -->
 <link rel="stylesheet" href="/98.css" />
+<!-- 主题变量与 98.css 重新着色：放在 public/ 以便 RSS 预览页（feed-style.js）复用 -->
+<link rel="stylesheet" href="/theme.css" />
 
 <!-- Font preloads -->
 <link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
