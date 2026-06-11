@@ -27,3 +27,6 @@ pnpm-debug.log*
 
 # others
 images/
+
+# superpowers brainstorm sessions
+.superpowers/
