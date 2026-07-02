@@ -6,9 +6,16 @@ interface Props {
 
 const { date, lang = 'zh' } = Astro.props;
 const locale = lang === 'zh' ? 'zh-CN' : 'en-US';
+
+// datetime 输出本地日历日期；toISOString() 的 UTC 时刻会比显示日期早一天（UTC+8 解析的日期）
+const isoDate = [
+	date.getFullYear(),
+	String(date.getMonth() + 1).padStart(2, '0'),
+	String(date.getDate()).padStart(2, '0'),
+].join('-');
 ---
 
-<time datetime={date.toISOString()}>
+<time datetime={isoDate}>
 	{
 		date.toLocaleDateString(locale, {
 			year: 'numeric',
