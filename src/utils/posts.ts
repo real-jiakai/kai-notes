@@ -49,3 +49,23 @@ export function getPostPath(post: CollectionEntry<'blog'>): string {
 	const prefix = post.data.lang === 'en' ? '/en' : '';
 	return `${prefix}/${year}/${month}/${slug}/`;
 }
+
+/** getStaticPaths entries for the /[year]/[month]/[...slug] post routes, with prev/next props. */
+export async function getPostStaticPaths(lang: PostLang) {
+	const posts = await getPublishedPosts(lang);
+	return posts.map((post, index) => {
+		const date = new Date(post.data.pubDate);
+		return {
+			params: {
+				year: date.getFullYear().toString(),
+				month: (date.getMonth() + 1).toString().padStart(2, '0'),
+				slug: post.data.slug || post.id.replace(/^en\//, ''),
+			},
+			props: {
+				post,
+				prevPost: index < posts.length - 1 ? posts[index + 1] : null,
+				nextPost: index > 0 ? posts[index - 1] : null,
+			},
+		};
+	});
+}

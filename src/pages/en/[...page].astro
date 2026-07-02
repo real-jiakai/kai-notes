@@ -4,9 +4,10 @@ import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import BackToTop from '../../components/BackToTop.astro';
 import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N, POSTS_PER_PAGE } from '../../consts';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 import { useTranslations } from '../../i18n/utils';
+import { getPublishedPosts, getPostPath } from '../../utils/posts';
 import type { Page, PaginateFunction } from 'astro';
 
 const lang = 'en';
@@ -14,14 +15,7 @@ const t = useTranslations(lang);
 const SITE_DESCRIPTION = SITE_DESCRIPTION_I18N[lang];
 
 export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
-	const posts = (await getCollection('blog', ({ data }) => {
-		// Filter out drafts, only show English posts
-		return data.draft !== true && data.lang === 'en';
-	})).sort(
-		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-	);
-
-	return paginate(posts, { pageSize: POSTS_PER_PAGE });
+	return paginate(await getPublishedPosts('en'), { pageSize: POSTS_PER_PAGE });
 }
 
 type Props = {
@@ -200,15 +194,10 @@ const nextUrl = page.url.next && withTrailingSlash(page.url.next);
 				<div class="window-body">
 					<div class="article-list">
 						{page.data.map((post) => {
-							const date = new Date(post.data.pubDate);
-							const year = date.getFullYear();
-							const month = (date.getMonth() + 1).toString().padStart(2, '0');
-							const slug = post.data.slug || post.id.replace(/^en\//, '');
-
 							return (
 								<div class="article-item">
 									<div class="article-item-header">
-										<a href={`/en/${year}/${month}/${slug}/`} class="article-title">
+										<a href={getPostPath(post)} class="article-title">
 											{post.data.title}
 										</a>
 										<span class="article-date">
