@@ -22,10 +22,7 @@
     "@astrojs/check": "^0.9.9",
     "@types/markdown-it": "^14.1.2",
     "@types/sanitize-html": "^2.16.1",
-    "@unocss/astro": "^66.7.4",
-    "@unocss/reset": "^66.7.4",
-    "typescript": "^6.0.3",
-    "unocss": "^66.7.4"
+    "typescript": "^6.0.3"
   },
   "pnpm": {
     "overrides": {
