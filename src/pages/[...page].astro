@@ -34,6 +34,11 @@ const { page } = Astro.props;
 const isFirstPage = page.currentPage === 1;
 const pageTitle = isFirstPage ? SITE_TITLE_I18N[lang] : t('article.list.page', { page: page.currentPage });
 const titleBarText = isFirstPage ? t('article.list') : t('article.list.page', { page: page.currentPage });
+
+// paginate() 生成的 prev/next 不带尾斜杠，与全站 URL 风格统一
+const withTrailingSlash = (url: string) => (url.endsWith('/') ? url : `${url}/`);
+const prevUrl = page.url.prev && withTrailingSlash(page.url.prev);
+const nextUrl = page.url.next && withTrailingSlash(page.url.next);
 ---
 
 <!doctype html>
@@ -219,8 +224,8 @@ const titleBarText = isFirstPage ? t('article.list') : t('article.list.page', { 
 
 					{page.lastPage > 1 && (
 						<div class="pagination">
-							{page.url.prev && (
-								<a href={page.url.prev} class="button">{t('pagination.prev')}</a>
+							{prevUrl && (
+								<a href={prevUrl} class="button">{t('pagination.prev')}</a>
 							)}
 
 							{Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => (
@@ -231,8 +236,8 @@ const titleBarText = isFirstPage ? t('article.list') : t('article.list.page', { 
 								)
 							))}
 
-							{page.url.next && (
-								<a href={page.url.next} class="button">{t('pagination.next')}</a>
+							{nextUrl && (
+								<a href={nextUrl} class="button">{t('pagination.next')}</a>
 							)}
 						</div>
 					)}
