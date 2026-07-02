@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
 import { SITE_TITLE_I18N } from '../consts';
 import { useTranslations } from '../i18n/utils';
 
@@ -23,6 +24,7 @@ const SITE_TITLE = SITE_TITLE_I18N[lang];
 					<div class="title-bar-text">{t('about.title')}</div>
 				</div>
 				<div class="window-body">
+					<h1 class="sr-only">{t('about.title')}</h1>
 					<h2>{t('about.title')}</h2>
 					<p>{t('about.description')}</p>
 
@@ -35,6 +37,7 @@ const SITE_TITLE = SITE_TITLE_I18N[lang];
 			</div>
 	</div>
 	<Footer lang={lang} />
+	<BackToTop lang={lang} />
 </body>
 </html>
 

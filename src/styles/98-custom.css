@@ -235,6 +235,7 @@ body .desktop .window .window-body {
 }
 
 .lightbox-body {
+  margin: 0; /* 中和 figure 的默认外边距 */
   padding: 4px;
   background: var(--surface);
 }

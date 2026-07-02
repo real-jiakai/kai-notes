@@ -40,7 +40,7 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 
 		<!-- Right: GitHub, RSS, Language -->
 		<div class="nav-right desktop-only">
-			<a href="https://github.com/real-jiakai/kai-notes" class="nav-link" target="_blank">GitHub</a>
+			<a href="https://github.com/real-jiakai/kai-notes" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
 			<a href={rssPath} class="nav-link">RSS</a>
 			<a href={otherLangUrl} class="nav-link">{otherLangName}</a>
 			<button class="nav-link theme-toggle" aria-label={t('theme.toggle')} title={t('theme.toggle')} aria-pressed="false">
@@ -61,7 +61,7 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		<a href={homePath} class="mobile-nav-link">{t('nav.home')}</a>
 		<a href={aboutPath} class="mobile-nav-link">{t('nav.about')}</a>
 		<div class="mobile-menu-divider"></div>
-		<a href="https://github.com/real-jiakai/kai-notes" class="mobile-nav-link" target="_blank">GitHub</a>
+		<a href="https://github.com/real-jiakai/kai-notes" class="mobile-nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
 		<a href={rssPath} class="mobile-nav-link">RSS</a>
 		<a href={otherLangUrl} class="mobile-nav-link">{otherLangName}</a>
 		<button class="mobile-nav-link theme-toggle" aria-label={t('theme.toggle')} aria-pressed="false">
@@ -199,13 +199,16 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 		padding: 0 12px;
 		overflow: hidden;
 		max-height: 0;
-		transition: max-height 0.2s ease-out;
+		/* visibility 让折叠状态下的链接不可聚焦（overflow:hidden 不会移出 Tab 顺序） */
+		visibility: hidden;
+		transition: max-height 0.2s ease-out, visibility 0.2s;
 	}
 
 	.mobile-menu.open {
 		max-height: 340px;
 		padding-top: 10px;
 		padding-bottom: 5px;
+		visibility: visible;
 	}
 
 	.mobile-nav-link {
