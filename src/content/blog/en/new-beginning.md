@@ -1,7 +1,7 @@
 ---
 title: 'A New Beginning'
 description: 'Launching my personal blog!'
-pubDate: 'Jul 17 2025'
+pubDate: 2025-07-17
 lang: 'en'
 ---
 

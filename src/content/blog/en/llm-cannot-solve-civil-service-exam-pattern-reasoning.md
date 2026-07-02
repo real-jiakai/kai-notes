@@ -1,7 +1,7 @@
 ---
 title: "The World's Most Powerful AIs All Failed: Pattern Reasoning Becomes LLMs' Cognitive Graveyard"
 description: "On the eve of the provincial civil service exam, I tested GPT 5.4 Pro, Gemini 3, Claude Opus 4.6 and other top AIs on pattern reasoning questions. They all failed spectacularly — some even resorted to searching for answers online. What fatal blind spot does this expose in current AI?"
-pubDate: 'Mar 14 2026'
+pubDate: 2026-03-14
 lang: 'en'
 draft: false
 ---

@@ -1,7 +1,7 @@
 ---
 title: "The Industrial Recipe for Synthetic Data: HuggingFace's 90 Experiments Reveal the Laws of Pretraining Data Production"
 description: "HuggingFace spent 12.7 GPU-years running 90 controlled experiments, finally turning the 'alchemy' of synthetic data for LLM pretraining into reproducible 'chemistry.'"
-pubDate: 'Mar 11 2026'
+pubDate: 2026-03-11
 lang: 'en'
 draft: false
 ---

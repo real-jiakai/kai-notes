@@ -1,7 +1,7 @@
 ---
 title: "AIGC Plagiarism Detection: CNKI's Self-Contradiction and a Doomed Battle of Containment"
 description: 'The academic controversy and reflections sparked by AIGC plagiarism detection during the 2026 graduation season'
-pubDate: 'Apr 01 2026'
+pubDate: 2026-04-01
 lang: 'en'
 draft: false
 ---

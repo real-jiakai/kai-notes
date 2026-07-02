@@ -1,7 +1,7 @@
 ---
 title: 'AI News - July 30, 2025'
 description: 'AI News Roundup for July 30, 2025'
-pubDate: 'Jul 30 2025'
+pubDate: 2025-07-30
 lang: 'en'
 draft: false
 ---

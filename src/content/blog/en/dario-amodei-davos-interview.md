@@ -1,7 +1,7 @@
 ---
 title: "Claude's Founder at Davos: When Programmers No Longer Need to 'Write' Code"
 description: "Insights from Anthropic founder Dario Amodei's latest Davos interview: Claude's real capabilities, the rise of Chinese open source, and how we should adapt"
-pubDate: 'Jan 22 2026'
+pubDate: 2026-01-22
 draft: false
 lang: 'en'
 ---

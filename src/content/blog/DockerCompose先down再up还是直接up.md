@@ -1,7 +1,7 @@
 ---
 title: '先 docker compose down 再 up -d，还是直接 up -d？读完官方文档终于搞懂了'
 description: '基于 Docker 官方文档，讲清 docker compose up -d 与 down + up 的本质区别：什么时候直接 up -d 就够，什么时候才需要先 down，以及 latest 镜像“不更新”的常见坑。'
-pubDate: 'Jun 11 2026'
+pubDate: 2026-06-11
 slug: 'docker-compose-up-vs-down'
 draft: false
 ---

@@ -42,9 +42,10 @@ export async function getAlternatePath(url: URL, targetLang: PostLang): Promise<
 
 /** Site-relative path for a post, e.g. `/2025/07/slug/` or `/en/2025/07/slug/`. */
 export function getPostPath(post: CollectionEntry<'blog'>): string {
+	// ISO 日期解析为 UTC 零点，用 UTC 取值保证任意时区构建产出相同 URL
 	const date = new Date(post.data.pubDate);
-	const year = date.getFullYear();
-	const month = (date.getMonth() + 1).toString().padStart(2, '0');
+	const year = date.getUTCFullYear();
+	const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
 	const slug = post.data.slug || post.id.replace(/^en\//, '');
 	const prefix = post.data.lang === 'en' ? '/en' : '';
 	return `${prefix}/${year}/${month}/${slug}/`;
@@ -57,8 +58,8 @@ export async function getPostStaticPaths(lang: PostLang) {
 		const date = new Date(post.data.pubDate);
 		return {
 			params: {
-				year: date.getFullYear().toString(),
-				month: (date.getMonth() + 1).toString().padStart(2, '0'),
+				year: date.getUTCFullYear().toString(),
+				month: (date.getUTCMonth() + 1).toString().padStart(2, '0'),
 				slug: post.data.slug || post.id.replace(/^en\//, ''),
 			},
 			props: {

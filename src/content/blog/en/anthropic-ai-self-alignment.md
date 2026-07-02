@@ -1,7 +1,7 @@
 ---
 title: 'What Should We Watch Out for When AI Starts Researching Its Own Alignment?'
 description: "A look at Anthropic's latest research: can AI supervise itself, or does it introduce new risks?"
-pubDate: 'Apr 14 2026'
+pubDate: 2026-04-14
 lang: 'en'
 draft: false
 ---

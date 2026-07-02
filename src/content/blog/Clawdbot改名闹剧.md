@@ -1,7 +1,7 @@
 ---
 title: '🦞 Clawdbot → Moltbot：一场72小时的互联网闹剧'
 description: '60000星开源项目被迫改名、10秒内被加密骗子抢注、1600万美元假代币崩盘——这场72小时的互联网风暴，暴露了AI时代开源生态的脆弱与荒诞'
-pubDate: 'Jan 28 2026'
+pubDate: 2026-01-28
 slug: 'clawdbot-moltbot-rename-drama'
 draft: false
 ---

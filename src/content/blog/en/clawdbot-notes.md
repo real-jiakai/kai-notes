@@ -1,7 +1,7 @@
 ---
 title: 'Clawdbot to Moltbot: A 72-Hour Internet Drama'
 description: 'A 60,000-star open source project forced to rename, hijacked by crypto scammers within 10 seconds, a $16 million fake token crash - this 72-hour storm exposed the fragility and absurdity of the open source ecosystem in the AI era'
-pubDate: 'Jan 28 2026'
+pubDate: 2026-01-28
 draft: false
 lang: 'en'
 ---

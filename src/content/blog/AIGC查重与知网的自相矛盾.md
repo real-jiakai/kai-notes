@@ -1,7 +1,7 @@
 ---
 title: 'AIGC查重：知网的自相矛盾，与一场注定失败的围堵战'
 description: '2026年毕业季，AIGC查重引发的学术界争议与反思'
-pubDate: 'Apr 01 2026'
+pubDate: 2026-04-01
 slug: 'aigc-plagiarism-check-cnki-contradiction'
 draft: false
 ---

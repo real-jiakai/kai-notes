@@ -1,7 +1,7 @@
 ---
 title: 'Perplexity Max 很好，但我不会订阅'
 description: 'Model Council 和 Computer 确实惊艳，但 $200/月的多模型智能体，真的值得买单吗？'
-pubDate: 'Mar 12 2026'
+pubDate: 2026-03-12
 slug: 'perplexity-max-not-subscribing'
 draft: false
 ---

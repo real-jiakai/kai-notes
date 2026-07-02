@@ -1,7 +1,7 @@
 ---
 title: 'Let Yourself Feel "Learned Helplessness" for a While'
 description: 'A note to myself when I feel trapped in learned helplessness, and to anyone else who feels lost.'
-pubDate: 'Apr 14 2026'
+pubDate: 2026-04-14
 draft: false
 lang: 'en'
 ---

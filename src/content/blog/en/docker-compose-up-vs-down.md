@@ -1,7 +1,7 @@
 ---
 title: 'docker compose down Then up -d, or Just up -d? What the Official Docs Actually Say'
 description: "Based on the official Docker docs: the real difference between docker compose up -d and down + up, when up -d alone is enough, when you actually need down first, and the classic pitfall of a stale latest image."
-pubDate: 'Jun 11 2026'
+pubDate: 2026-06-11
 lang: 'en'
 draft: false
 ---

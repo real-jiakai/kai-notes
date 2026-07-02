@@ -1,7 +1,7 @@
 ---
 title: '全球最强AI集体翻车：图形推理成了大模型的“认知坟场”'
 description: '省考前夕，我用GPT 5.4 Pro、Gemini 3、Claude Opus 4.6等顶级AI挑战公考图形推理，结果全军覆没。有的甚至直接上网搜答案作弊。这背后暴露了当前AI的什么致命短板？'
-pubDate: 'Mar 14 2026'
+pubDate: 2026-03-14
 slug: 'llm-cannot-solve-civil-service-exam-pattern-reasoning'
 draft: false
 ---

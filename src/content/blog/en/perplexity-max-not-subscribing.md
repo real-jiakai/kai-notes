@@ -1,7 +1,7 @@
 ---
 title: "Perplexity Max Is Great, But I Won't Subscribe"
 description: "Model Council and Computer are genuinely impressive, but is a $200/month multi-model agent really worth paying for?"
-pubDate: 'Mar 12 2026'
+pubDate: 2026-03-12
 lang: 'en'
 draft: false
 ---

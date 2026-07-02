@@ -7,12 +7,8 @@ interface Props {
 const { date, lang = 'zh' } = Astro.props;
 const locale = lang === 'zh' ? 'zh-CN' : 'en-US';
 
-// datetime 输出本地日历日期；toISOString() 的 UTC 时刻会比显示日期早一天（UTC+8 解析的日期）
-const isoDate = [
-	date.getFullYear(),
-	String(date.getMonth() + 1).padStart(2, '0'),
-	String(date.getDate()).padStart(2, '0'),
-].join('-');
+// ISO 日期解析为 UTC 零点，展示与 datetime 都按 UTC 取日历日期，任意时区构建结果一致
+const isoDate = date.toISOString().slice(0, 10);
 ---
 
 <time datetime={isoDate}>
@@ -21,6 +17,7 @@ const isoDate = [
 			year: 'numeric',
 			month: 'short',
 			day: 'numeric',
+			timeZone: 'UTC',
 		})
 	}
 </time>
