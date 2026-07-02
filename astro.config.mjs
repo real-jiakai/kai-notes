@@ -2,45 +2,41 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { unified } from '@astrojs/markdown-remark';
+import { satteri } from '@astrojs/markdown-satteri';
 
 // 文章图片均为远程直链，Astro 不会注入 loading/decoding，这里统一补上
-function rehypeLazyImages() {
-	/** @param {any} tree */
-	return (tree) => {
-		const walk = (/** @type {any} */ node) => {
-			if (node.type === 'element' && node.tagName === 'img') {
-				node.properties.loading ??= 'lazy';
-				node.properties.decoding ??= 'async';
-			}
-			for (const child of node.children ?? []) walk(child);
-		};
-		walk(tree);
-	};
-}
+const lazyImages = {
+	name: 'lazy-images',
+	element: {
+		filter: ['img'],
+		/** @param {any} node @param {any} ctx */
+		visit(node, ctx) {
+			if (node.properties?.loading == null) ctx.setProperty(node, 'loading', 'lazy');
+			if (node.properties?.decoding == null) ctx.setProperty(node, 'decoding', 'async');
+		},
+	},
+};
 
 // 布局已渲染文章标题为 h1，正文里的 # 标题降级为 h2，避免一页双 h1
-function rehypeDemoteH1() {
-	/** @param {any} tree */
-	return (tree) => {
-		const walk = (/** @type {any} */ node) => {
-			if (node.type === 'element' && node.tagName === 'h1') {
-				node.tagName = 'h2';
-			}
-			for (const child of node.children ?? []) walk(child);
-		};
-		walk(tree);
-	};
-}
+const demoteH1 = {
+	name: 'demote-h1',
+	element: {
+		filter: ['h1'],
+		/** @param {any} node */
+		visit(node) {
+			return { ...node, tagName: 'h2' };
+		},
+	},
+};
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://blog.gujiakai.me',
 	integrations: [mdx(), sitemap()],
 	markdown: {
-		// Astro 7 默认用 Sätteri 渲染 Markdown；显式走 unified 以复用 rehype 插件
-		processor: unified({
-			rehypePlugins: [rehypeLazyImages, rehypeDemoteH1],
+		// Astro 7 原生 Sätteri 管线（Rust），插件用其 HAST visitor API
+		processor: satteri({
+			hastPlugins: [lazyImages, demoteH1],
 		}),
 	},
 	i18n: {
