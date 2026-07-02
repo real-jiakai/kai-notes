@@ -1,9 +1,9 @@
 ---
 // 导航栏组件
-import { getLangFromUrl, useTranslations, getLocalePath, getAlternateLocaleUrl } from '../i18n/utils';
+import { getLangFromUrl, useTranslations, getLocalePath } from '../i18n/utils';
 import { languages } from '../i18n/ui';
 import { SITE_TITLE_I18N } from '../consts';
-import { getPublishedPosts, getPostPath } from '../utils/posts';
+import { getAlternatePath } from '../utils/posts';
 
 interface Props {
 	lang?: 'zh' | 'en';
@@ -16,23 +16,11 @@ const siteTitle = SITE_TITLE_I18N[lang];
 const homePath = getLocalePath(lang, '/');
 const aboutPath = getLocalePath(lang, '/about/');
 
-// Generate URLs for each language
-const langUrls = Object.fromEntries(
-	Object.keys(languages).map(code => [code, getAlternateLocaleUrl(Astro.url, code as 'zh' | 'en')])
-);
-
 const otherLang = lang === 'zh' ? 'en' : 'zh';
-let otherLangUrl = langUrls[otherLang];
 const otherLangName = languages[otherLang];
 
-// 文章页仅在译文存在时才指向对应文章，否则退回目标语言首页（避免 404）
-if (/^(?:\/en)?\/\d{4}\/\d{2}\/.+/.test(Astro.url.pathname)) {
-	const targetPath = otherLangUrl.endsWith('/') ? otherLangUrl : `${otherLangUrl}/`;
-	const otherLangPosts = await getPublishedPosts(otherLang);
-	if (!otherLangPosts.some((post) => getPostPath(post) === targetPath)) {
-		otherLangUrl = getLocalePath(otherLang, '/');
-	}
-}
+// 仅在对应语言页面存在时才深链，否则退回目标语言首页（避免 404）
+const otherLangUrl = (await getAlternatePath(Astro.url, otherLang)) ?? getLocalePath(otherLang, '/');
 const rssPath = lang === 'zh' ? '/rss.xml' : '/en/rss.xml';
 const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 ---

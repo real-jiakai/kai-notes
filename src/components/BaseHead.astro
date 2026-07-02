@@ -3,16 +3,29 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import '../styles/98-custom.css';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE_I18N } from '../consts';
+import { getLangFromUrl } from '../i18n/utils';
+import { getAlternatePath } from '../utils/posts';
 
 interface Props {
 	title: string;
 	description: string;
+	// 文章页传入日期以生成 og:type=article 与 article:*_time
+	pubDate?: Date;
+	updatedDate?: Date;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description } = Astro.props;
+const { title, description, pubDate, updatedDate } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const siteTitle = SITE_TITLE_I18N[lang];
+const rssHref = new URL(lang === 'en' ? 'en/rss.xml' : 'rss.xml', Astro.site);
+
+// hreflang：仅当对应语言版本真实存在时输出；默认语言（中文）作为 x-default
+const zhPath = lang === 'zh' ? Astro.url.pathname : await getAlternatePath(Astro.url, 'zh');
+const enPath = lang === 'en' ? Astro.url.pathname : await getAlternatePath(Astro.url, 'en');
 ---
 
 <!-- Global Metadata -->
@@ -23,9 +36,12 @@ const { title, description } = Astro.props;
 <link
 	rel="alternate"
 	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+	title={siteTitle}
+	href={rssHref}
 />
+{zhPath && <link rel="alternate" hreflang="zh-CN" href={new URL(zhPath, Astro.site)} />}
+{enPath && <link rel="alternate" hreflang="en" href={new URL(enPath, Astro.site)} />}
+{zhPath && <link rel="alternate" hreflang="x-default" href={new URL(zhPath, Astro.site)} />}
 <meta name="generator" content={Astro.generator} />
 
 <!-- 主题初始化：在样式表加载前确定 data-theme，避免错误主题闪烁（FOUC） -->
@@ -59,17 +75,20 @@ const { title, description } = Astro.props;
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
-<meta name="title" content={title} />
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:type" content={pubDate ? 'article' : 'website'} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
+<meta property="og:site_name" content={siteTitle} />
+<meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+{pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+{updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />

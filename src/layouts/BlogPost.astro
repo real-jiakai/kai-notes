@@ -32,7 +32,7 @@ function getPostUrl(post: CollectionEntry<'blog'>) {
 
 <html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} pubDate={pubDate} updatedDate={updatedDate} />
 		<style>
 			html, body {
 				height: 100%;
