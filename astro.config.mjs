@@ -19,6 +19,20 @@ function rehypeLazyImages() {
 	};
 }
 
+// 布局已渲染文章标题为 h1，正文里的 # 标题降级为 h2，避免一页双 h1
+function rehypeDemoteH1() {
+	/** @param {any} tree */
+	return (tree) => {
+		const walk = (/** @type {any} */ node) => {
+			if (node.type === 'element' && node.tagName === 'h1') {
+				node.tagName = 'h2';
+			}
+			for (const child of node.children ?? []) walk(child);
+		};
+		walk(tree);
+	};
+}
+
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://blog.gujiakai.me',
@@ -26,7 +40,7 @@ export default defineConfig({
 	markdown: {
 		// Astro 7 默认用 Sätteri 渲染 Markdown；显式走 unified 以复用 rehype 插件
 		processor: unified({
-			rehypePlugins: [rehypeLazyImages],
+			rehypePlugins: [rehypeLazyImages, rehypeDemoteH1],
 		}),
 	},
 	i18n: {
