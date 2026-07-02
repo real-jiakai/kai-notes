@@ -3,7 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
-import { SITE_DESCRIPTION_I18N, POSTS_PER_PAGE } from '../consts';
+import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N, POSTS_PER_PAGE } from '../consts';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 import { useTranslations } from '../i18n/utils';
@@ -29,12 +29,17 @@ type Props = {
 };
 
 const { page } = Astro.props;
+
+// 首页（第 1 页）沿用站点标题，其余分页显示页码
+const isFirstPage = page.currentPage === 1;
+const pageTitle = isFirstPage ? SITE_TITLE_I18N[lang] : t('article.list.page', { page: page.currentPage });
+const titleBarText = isFirstPage ? t('article.list') : t('article.list.page', { page: page.currentPage });
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={t('article.list.page', { page: page.currentPage })} description={SITE_DESCRIPTION} />
+		<BaseHead title={pageTitle} description={SITE_DESCRIPTION} />
 		<style>
 			html, body {
 				height: 100%;
@@ -185,7 +190,7 @@ const { page } = Astro.props;
 		<div class="desktop">
 			<div class="window">
 				<div class="title-bar">
-					<div class="title-bar-text">{t('article.list.page', { page: page.currentPage })}</div>
+					<div class="title-bar-text">{titleBarText}</div>
 				</div>
 				<div class="window-body">
 					<div class="article-list">
