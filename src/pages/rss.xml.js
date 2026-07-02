@@ -22,14 +22,16 @@ export async function GET(context) {
 			// 将Markdown转换为HTML
 			const html = parser.render(post.body);
 
-			// 清理和净化HTML
+			// 清理和净化HTML；链接仅保留 http(s)，target 交由阅读器处理
 			const sanitizedHtml = sanitizeHtml(html, {
-				allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'audio']),
+				allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
 				allowedAttributes: {
 					...sanitizeHtml.defaults.allowedAttributes,
 					img: ['src', 'alt', 'title', 'width', 'height'],
-					a: ['href', 'title', 'target'],
+					a: ['href', 'title'],
 				},
+				allowedSchemes: ['http', 'https', 'mailto'],
+				allowProtocolRelative: false,
 			});
 
 			return {

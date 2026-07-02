@@ -23,14 +23,16 @@ export async function GET(context) {
 			// Convert Markdown to HTML
 			const html = parser.render(post.body);
 
-			// Sanitize HTML
+			// Sanitize HTML; links keep http(s) only, target is left to the reader
 			const sanitizedHtml = sanitizeHtml(html, {
-				allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'audio']),
+				allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
 				allowedAttributes: {
 					...sanitizeHtml.defaults.allowedAttributes,
 					img: ['src', 'alt', 'title', 'width', 'height'],
-					a: ['href', 'title', 'target'],
+					a: ['href', 'title'],
 				},
+				allowedSchemes: ['http', 'https', 'mailto'],
+				allowProtocolRelative: false,
 			});
 
 			return {
