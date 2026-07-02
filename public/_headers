@@ -1,6 +1,10 @@
 # Netlify HTTP 响应头（https://docs.netlify.com/routing/headers/）
+# CSP 说明：Astro 会内联小脚本/样式，且主题初始化必须内联执行，
+# 故 script-src/style-src 需要 'unsafe-inline'（静态 _headers 无法逐构建更新 hash）。
+# 图片放开 https:（文章图片为第三方直链）；utterances 评论需要其脚本与 iframe。
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://utteranc.es; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; frame-src https://utteranc.es; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
