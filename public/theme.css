@@ -1,12 +1,11 @@
-/* Win98 主题变量：:root 为浅色（与现状一致），html[data-theme="dark"] 为 High Contrast Black。
-   设计文档：docs/superpowers/specs/2026-06-11-dark-mode-design.md */
+/* Win98 主题变量：:root 为浅色（与现状一致），html[data-theme="dark"] 为 High Contrast Black。 */
 :root {
   color-scheme: light;
   --desktop: #c0c0c0;
   --surface: #c0c0c0;
   --text: #000000;
   --text-secondary: #404040;
-  --text-muted: #666666;
+  --text-muted: #4d4d4d; /* ≥4.5:1 对比度（WCAG AA），#666 在 #c0c0c0 上仅 ~3.1:1 */
   --heading: #000080;
   --link: #000080;
   --link-hover: #0000ff;
@@ -103,6 +102,17 @@ html .title-bar {
 /* 站点上所有可见链接都有专门样式；此规则统一裸链接颜色（浅色仍为 navy 系） */
 html a {
   color: var(--link);
+}
+
+/* 98.css 的焦点轮廓硬编码 #000/#00f，深色下不可见；跟随主题变量 */
+html button:focus,
+html input[type='reset']:focus,
+html input[type='submit']:focus,
+html summary:focus {
+  outline: 1px dotted var(--text);
+}
+html a:focus {
+  outline: 1px dotted var(--link);
 }
 
 /* 深色滚动条：WebKit 的轨道纹理是 SVG data-URI（无法用变量），改为纯色 */
