@@ -10,7 +10,7 @@ export function getLangFromUrl(url: URL): Lang {
 
 export function useTranslations(lang: Lang) {
 	return function t(key: keyof (typeof ui)[typeof defaultLang], params?: Record<string, string | number>): string {
-		let text = ui[lang][key] || ui[defaultLang][key];
+		let text: string = ui[lang][key] || ui[defaultLang][key];
 		if (params) {
 			Object.entries(params).forEach(([k, v]) => {
 				text = text.replace(`{${k}}`, String(v));

@@ -3,17 +3,17 @@ import BaseHead from '../components/BaseHead.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
-import { SITE_TITLE_I18N, SITE_DESCRIPTION_I18N, POSTS_PER_PAGE } from '../consts';
-import { getCollection } from 'astro:content';
+import { SITE_DESCRIPTION_I18N, POSTS_PER_PAGE } from '../consts';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 import { useTranslations } from '../i18n/utils';
+import type { Page, PaginateFunction } from 'astro';
 
 const lang = 'zh';
 const t = useTranslations(lang);
-const SITE_TITLE = SITE_TITLE_I18N[lang];
 const SITE_DESCRIPTION = SITE_DESCRIPTION_I18N[lang];
 
-export async function getStaticPaths({ paginate }) {
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
 	const posts = (await getCollection('blog', ({ data }) => {
 		// 过滤掉草稿文章，只显示中文文章
 		return data.draft !== true && (data.lang === 'zh' || data.lang === undefined);
@@ -23,6 +23,10 @@ export async function getStaticPaths({ paginate }) {
 
 	return paginate(posts, { pageSize: POSTS_PER_PAGE });
 }
+
+type Props = {
+	page: Page<CollectionEntry<'blog'>>;
+};
 
 const { page } = Astro.props;
 ---
