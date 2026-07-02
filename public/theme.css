@@ -52,6 +52,25 @@ html body {
   color: var(--text);
 }
 
+/* Pixelated MS Sans Serif 是按 11px 设计的位图字体，站点全局字号为 16px，
+   缩放渲染必然发虚；正文与控件一律改用矢量字体（与字体文件损坏时期的
+   Arial 回退观感一致），并恢复抗锯齿 */
+html .title-bar,
+html .window,
+html button,
+html input,
+html label,
+html legend,
+html li[role='tab'],
+html option,
+html select,
+html table,
+html textarea,
+html ul.tree-view {
+  font-family: Arial, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: auto;
+}
+
 /* 98.css 用 color:transparent + text-shadow 渲染按钮文字（像素风），
    重新着色时只换底色与 shadow 颜色 */
 html button,
