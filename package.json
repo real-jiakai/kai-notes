@@ -3,8 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "sync:assets": "cp node_modules/98.css/dist/98.css public/98.css && esbuild scripts/feed-style.js --minify --outfile=public/feed-style.js",
+    "dev": "pnpm sync:assets && astro dev",
+    "build": "pnpm sync:assets && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -23,6 +24,7 @@
     "@astrojs/check": "^0.9.9",
     "@types/markdown-it": "^14.1.2",
     "@types/sanitize-html": "^2.16.1",
+    "esbuild": "^0.28.1",
     "typescript": "^6.0.3"
   },
   "pnpm": {
