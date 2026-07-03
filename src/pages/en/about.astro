@@ -57,9 +57,13 @@ const SITE_TITLE = SITE_TITLE_I18N[lang];
 	}
 
 	.desktop {
-		max-width: 800px;
+		/* 同 BlogPost：显式宽度避免按内容收缩；flex:1 把 footer 推到视口底部 */
+		width: 100%;
+		box-sizing: border-box;
+		max-width: 840px; /* 800px 内容 + 40px padding */
 		margin: 0 auto;
 		padding: 0 20px;
+		flex: 1;
 	}
 
 	.window {
