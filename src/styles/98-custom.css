@@ -104,7 +104,7 @@ body .desktop .window .window-body {
   max-width: 100%;
   overflow-x: auto;
   border-collapse: collapse;
-  margin: 15px 0;
+  margin: 1.5em 0;
   font-size: 14px;
   background: var(--content-bg);
 }
@@ -126,7 +126,7 @@ body .desktop .window .window-body {
 
 /* 文章 Markdown 内容着色：slot 渲染的 Markdown 不带 Astro scope 属性，
    组件内 scoped 规则匹配不到，必须用全局规则（同上方表格规则）。
-   只管颜色；字号/间距维持 global.css 的现状渲染。 */
+   此块只管颜色；间距见下方「正文排版节奏」块。 */
 .article-content h1,
 .article-content h2,
 .article-content h3,
@@ -152,6 +152,96 @@ body .desktop .window .window-body {
 
 .article-content :not(pre) > code {
   background-color: var(--code-bg);
+}
+
+/* ===== 正文排版节奏 =====
+   UA/global.css 的默认段距（1em）对 16px 中文正文太挤：
+   块级元素间距统一放宽到 1.5em，标题上方留出分节空白。 */
+.article-content p {
+  margin-block: 0 1.5em;
+}
+
+.article-content pre,
+.article-content blockquote {
+  margin-block: 1.5em;
+}
+
+.article-content ul,
+.article-content ol {
+  margin-block: 0.5em 1.5em;
+}
+
+.article-content li + li {
+  margin-block-start: 0.4em;
+}
+
+.article-content li > ul,
+.article-content li > ol {
+  margin-block: 0.4em 0;
+}
+
+.article-content h2 {
+  margin-block: 2.5rem 0.75rem;
+}
+
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+  margin-block: 2rem 0.75rem;
+}
+
+/* 正文以标题开头时不额外留分节空白（头部信息栏已有分隔线） */
+.article-content > :is(h2, h3, h4):first-child {
+  margin-block-start: 0.5rem;
+}
+
+/* 锚点跳转时标题不要贴住视口顶 */
+.article-content :is(h2, h3, h4, h5, h6) {
+  scroll-margin-top: 16px;
+}
+
+/* ===== 代码块复制按钮 =====
+   按钮由 BlogPost 布局的脚本注入；.code-block 是包裹 <pre> 的定位容器 */
+.code-block {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 0;
+  min-height: 0;
+  padding: 5px;
+  line-height: 0;
+  /* 98.css 按钮用 color:transparent + text-shadow 画文字，SVG 需要真实 color */
+  color: var(--text);
+  text-shadow: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.copy-btn svg {
+  display: block;
+}
+
+.code-block:hover .copy-btn,
+.copy-btn.feedback {
+  opacity: 1;
+}
+
+/* 单独成条：老浏览器不认识的伪类会废掉整条选择器列表，
+   合写会连 hover 显示一起失效；:focus 同时兜底键盘可见性 */
+.copy-btn:focus {
+  opacity: 1;
+}
+
+/* 无 hover 的触屏设备常显 */
+@media (hover: none) {
+  .copy-btn {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 600px) {

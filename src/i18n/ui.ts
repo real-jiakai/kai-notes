@@ -48,6 +48,14 @@ export const ui = {
 
 		// Back to top
 		'backToTop': '返回顶部',
+
+		// Table of contents
+		'toc.title': '本页目录',
+
+		// Code blocks
+		'code.copy': '复制代码',
+		'code.copied': '已复制',
+		'code.copyFailed': '复制失败',
 	},
 	en: {
 		// Site
@@ -91,5 +99,13 @@ export const ui = {
 
 		// Back to top
 		'backToTop': 'Back to Top',
+
+		// Table of contents
+		'toc.title': 'On This Page',
+
+		// Code blocks
+		'code.copy': 'Copy code',
+		'code.copied': 'Copied!',
+		'code.copyFailed': 'Copy failed',
 	},
 } as const;

@@ -96,6 +96,19 @@ html input[type='submit']:not(:disabled):active {
   text-shadow: 1px 1px var(--text);
 }
 
+/* 98.css 在无 hover 的触屏设备上用 :hover 模拟按压态，斜面同样是硬编码浅色 */
+@media (hover: none) {
+  html button:not(:disabled):hover,
+  html input[type='reset']:not(:disabled):hover,
+  html input[type='submit']:not(:disabled):hover {
+    box-shadow:
+      inset -1px -1px var(--bevel-light-outer),
+      inset 1px 1px var(--bevel-dark-outer),
+      inset -2px -2px var(--bevel-light),
+      inset 2px 2px var(--bevel-dark);
+  }
+}
+
 html pre {
   background: var(--code-bg);
   box-shadow:
@@ -132,6 +145,30 @@ html summary:focus {
 }
 html a:focus {
   outline: 1px dotted var(--link);
+}
+
+/* 树形控件（右侧目录）：98.css 硬编码白底黑字灰点线与浅色凹陷斜面，深色下跟随主题变量。
+   最后一条是 98.css 用白色色块「擦除」末节点多余竖线的技巧，同步换底色 */
+html[data-theme='dark'] ul.tree-view {
+  background: var(--content-bg);
+  color: var(--text);
+  box-shadow:
+    inset -1px -1px var(--bevel-light-outer),
+    inset 1px 1px var(--bevel-dark),
+    inset -2px -2px var(--bevel-light),
+    inset 2px 2px var(--bevel-dark-outer);
+}
+html[data-theme='dark'] ul.tree-view a {
+  color: var(--text);
+}
+html[data-theme='dark'] ul.tree-view ul {
+  border-left-color: var(--border);
+}
+html[data-theme='dark'] ul.tree-view ul > li::before {
+  border-bottom-color: var(--border);
+}
+html[data-theme='dark'] ul.tree-view ul > li:last-child::after {
+  background: var(--content-bg);
 }
 
 /* 深色滚动条：WebKit 的轨道纹理是 SVG data-URI（无法用变量），改为纯色 */

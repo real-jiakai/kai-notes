@@ -1,0 +1,185 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/utils';
+
+interface Props {
+	headings: MarkdownHeading[];
+	lang: Lang;
+}
+
+const { headings, lang } = Astro.props;
+const t = useTranslations(lang);
+
+// 正文 h1 已被 demote-h1 插件降为 h2，这里同步降级，保证目录层级与渲染一致；取 h2–h4 三级
+type TocNode = { heading: MarkdownHeading; children: TocNode[] };
+const items = headings
+	.map((h) => ({ ...h, depth: Math.max(h.depth, 2) }))
+	.filter((h) => h.depth <= 4);
+
+const tree: TocNode[] = [];
+{
+	const stack: TocNode[] = [];
+	for (const heading of items) {
+		const node: TocNode = { heading, children: [] };
+		while (stack.length > 0 && stack[stack.length - 1].heading.depth >= heading.depth) {
+			stack.pop();
+		}
+		const parent = stack.at(-1);
+		(parent ? parent.children : tree).push(node);
+		stack.push(node);
+	}
+}
+---
+
+{
+	items.length >= 2 && (
+		<aside class="toc-rail">
+			<nav class="toc window" aria-labelledby="toc-title">
+				<div class="title-bar">
+					<div class="title-bar-text" id="toc-title">
+						{t('toc.title')}
+					</div>
+				</div>
+				<div class="toc-body">
+					<ul class="tree-view">
+						{tree.map((l1) => (
+							<li>
+								<a href={`#${l1.heading.slug}`}>{l1.heading.text}</a>
+								{l1.children.length > 0 && (
+									<ul>
+										{l1.children.map((l2) => (
+											<li>
+												<a href={`#${l2.heading.slug}`}>{l2.heading.text}</a>
+												{l2.children.length > 0 && (
+													<ul>
+														{l2.children.map((l3) => (
+															<li>
+																<a href={`#${l3.heading.slug}`}>{l3.heading.text}</a>
+															</li>
+														))}
+													</ul>
+												)}
+											</li>
+										))}
+									</ul>
+								)}
+							</li>
+						))}
+					</ul>
+				</div>
+			</nav>
+		</aside>
+	)
+}
+
+<style>
+	/* 只在正文右侧留得下 220px 轨道时显示（840px 布局 + 两侧对称留白，
+	   另留 ~20px 余量给 Windows/Linux 的经典滚动条——媒体查询宽度含滚动条，
+	   布局宽度不含，1320px 临界值会差出几像素的横向滚动）；
+	   绝对定位在 .desktop 右外侧，不挤压正文，窄屏/移动端直接隐藏 */
+	.toc-rail {
+		display: none;
+	}
+
+	@media (min-width: 1340px) {
+		.toc-rail {
+			display: block;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 100%;
+			margin-left: 16px;
+			width: 220px;
+		}
+	}
+
+	.toc {
+		position: sticky;
+		top: 16px;
+	}
+
+	/* max-height 给右下角的返回顶部按钮留出空间，超长目录在窗体内滚动 */
+	.toc-body {
+		margin: 8px;
+		overflow-y: auto;
+		max-height: calc(100vh - 150px);
+	}
+
+	.toc-body .tree-view {
+		font-size: 13px;
+		line-height: 1.5;
+	}
+
+	.toc-body .tree-view a {
+		display: inline-block;
+		padding: 1px 3px;
+		overflow-wrap: anywhere;
+	}
+
+	.toc-body .tree-view a:hover {
+		text-decoration: underline;
+	}
+
+	/* 当前小节：Win98 选中态；下划线是不依赖颜色的第二重指示（也照顾强制配色模式） */
+	.toc-body .tree-view a[aria-current='location'] {
+		background-color: var(--titlebar-1);
+		color: #ffffff;
+		text-decoration: underline;
+	}
+
+	/* 深色下 navy 底与近黑背景对比只有 ~1.2:1，选中态换用链接色反白 */
+	html[data-theme='dark'] .toc-body .tree-view a[aria-current='location'] {
+		background-color: var(--link);
+		color: #000000;
+	}
+</style>
+
+<script>
+	// 目录滚动跟随：高亮当前阅读的小节
+	const tocRail = document.querySelector('.toc-rail');
+	if (tocRail) {
+		const links = Array.from(tocRail.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+		const pairs = links.flatMap((link) => {
+			const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+			return target ? [{ link, target }] : [];
+		});
+
+		let current: HTMLAnchorElement | null = null;
+		const update = () => {
+			let active: HTMLAnchorElement | null = null;
+			for (const { link, target } of pairs) {
+				// 阈值须略大于标题的 scroll-margin-top(16px)：点目录跳转后标题停在 16px，
+				// 阈值过大时紧跟其后的下级标题会抢走高亮
+				if (target.getBoundingClientRect().top <= 32) active = link;
+			}
+			// 滚到页底时强制高亮最后一节：末节太短时其标题可能永远越不过阈值线。
+			// 仅在页面确实可滚动时生效，否则「不足一屏」会被误判成「已到底」
+			const scrollHeight = document.documentElement.scrollHeight;
+			if (
+				scrollHeight > window.innerHeight &&
+				window.innerHeight + window.scrollY >= scrollHeight - 4
+			) {
+				active = pairs[pairs.length - 1]?.link ?? active;
+			}
+			if (active !== current) {
+				current?.removeAttribute('aria-current');
+				active?.setAttribute('aria-current', 'location');
+				current = active;
+			}
+		};
+
+		let raf = 0;
+		const schedule = () => {
+			if (!raf) {
+				raf = requestAnimationFrame(() => {
+					raf = 0;
+					update();
+				});
+			}
+		};
+		window.addEventListener('scroll', schedule, { passive: true });
+		window.addEventListener('resize', schedule, { passive: true });
+		update();
+	}
+</script>

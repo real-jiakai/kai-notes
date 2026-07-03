@@ -17,9 +17,9 @@ type Props = {
 };
 
 const { post, prevPost, nextPost } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 ---
 
-<BlogPost {...post.data} prevPost={prevPost} nextPost={nextPost} lang={lang}>
+<BlogPost {...post.data} prevPost={prevPost} nextPost={nextPost} lang={lang} headings={headings}>
 	<Content />
 </BlogPost>

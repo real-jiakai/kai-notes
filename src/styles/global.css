@@ -4,6 +4,13 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
+/* 目录/锚点跳转平滑滚动；尊重系统的减少动态效果偏好 */
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
 :root {
 	--accent: #2337ff;
 	--accent-dark: #000d8a;

@@ -1,10 +1,12 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 import BaseHead from '../components/BaseHead.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import BackToTop from '../components/BackToTop.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import type { Lang } from '../i18n/utils';
 import { getPostPath } from '../utils/posts';
@@ -13,9 +15,11 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	prevPost?: CollectionEntry<'blog'> | null;
 	nextPost?: CollectionEntry<'blog'> | null;
 	lang?: Lang;
+	headings?: MarkdownHeading[];
 };
 
-const { title, description, pubDate, updatedDate, prevPost, nextPost, lang: propLang } = Astro.props;
+const { title, description, pubDate, updatedDate, prevPost, nextPost, lang: propLang, headings } =
+	Astro.props;
 const lang = propLang || getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
@@ -49,6 +53,7 @@ const t = useTranslations(lang);
 				flex: 1;
 				display: flex;
 				min-width: 0;
+				position: relative; /* 右侧目录轨道的定位基准 */
 			}
 
 			.window {
@@ -89,7 +94,7 @@ const t = useTranslations(lang);
 
 			.article-content {
 				padding: 15px;
-				line-height: 1.6;
+				line-height: 1.75;
 				color: var(--text);
 			}
 			
@@ -193,6 +198,8 @@ const t = useTranslations(lang);
 	<body>
 		<Navigation lang={lang} />
 		<div class="desktop">
+			<!-- 目录放在正文前：键盘用户不必先穿过全文才能到达；视觉位置由绝对定位决定，不受 DOM 顺序影响 -->
+			<TableOfContents headings={headings ?? []} lang={lang} />
 			<div class="window">
 				<div class="title-bar">
 					<div class="title-bar-text">{t('article.reading')}</div>
@@ -209,9 +216,16 @@ const t = useTranslations(lang);
 							</div>
 						)}
 					</div>
-					<div class="article-content">
+					<div
+						class="article-content"
+						data-label-copy={t('code.copy')}
+						data-label-copied={t('code.copied')}
+						data-label-copy-failed={t('code.copyFailed')}
+					>
 						<slot />
 					</div>
+					<!-- 复制按钮的读屏播报区：aria-label 变化对未聚焦按钮不播报，live region 才可靠 -->
+					<div id="copy-feedback" role="status" class="sr-only"></div>
 					<div class="article-navigation">
 						<div>
 							{prevPost ? (
@@ -317,6 +331,78 @@ const t = useTranslations(lang);
 				if (e.key === 'Escape' && lightbox?.classList.contains('active')) {
 					closeLightbox();
 				}
+			});
+		</script>
+
+		<script>
+			// 代码块复制按钮：包一层定位容器，hover/聚焦时显示（触屏常显）
+			const copyIcon =
+				'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12"/><path d="M5 15H3V3h12v2"/></svg>';
+			const checkIcon =
+				'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+			const failIcon =
+				'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+
+			// 剪贴板 API 不可用（非安全上下文/老浏览器）时干脆不注入按钮，避免摆设
+			const content =
+				typeof navigator.clipboard?.writeText === 'function'
+					? document.querySelector('.article-content')
+					: null;
+			const copyLabel = content?.getAttribute('data-label-copy') || 'Copy code';
+			const copiedLabel = content?.getAttribute('data-label-copied') || 'Copied!';
+			const failedLabel = content?.getAttribute('data-label-copy-failed') || 'Copy failed';
+			const feedbackRegion = document.getElementById('copy-feedback');
+
+			// 先清空再延迟写入：连续复制时文本相同，不清空则 live region 不会重新播报
+			const announce = (label: string) => {
+				if (!feedbackRegion) return;
+				feedbackRegion.textContent = '';
+				window.setTimeout(() => {
+					feedbackRegion.textContent = label;
+				}, 30);
+			};
+
+			content?.querySelectorAll('pre').forEach((pre) => {
+				const wrapper = document.createElement('div');
+				wrapper.className = 'code-block';
+				pre.replaceWith(wrapper);
+				wrapper.append(pre);
+
+				const button = document.createElement('button');
+				button.type = 'button';
+				button.className = 'copy-btn';
+				button.title = copyLabel;
+				button.setAttribute('aria-label', copyLabel);
+				button.innerHTML = copyIcon;
+
+				let restore = 0;
+				const flash = (label: string, icon: string) => {
+					button.innerHTML = icon;
+					button.title = label;
+					button.setAttribute('aria-label', label);
+					button.classList.add('feedback');
+					announce(label);
+					window.clearTimeout(restore);
+					restore = window.setTimeout(() => {
+						button.innerHTML = copyIcon;
+						button.title = copyLabel;
+						button.setAttribute('aria-label', copyLabel);
+						button.classList.remove('feedback');
+					}, 2000);
+				};
+
+				button.addEventListener('click', async () => {
+					const code = pre.querySelector('code');
+					const text = (code ?? pre).textContent?.replace(/\n$/, '') ?? '';
+					try {
+						await navigator.clipboard.writeText(text);
+						flash(copiedLabel, checkIcon);
+					} catch {
+						flash(failedLabel, failIcon);
+					}
+				});
+
+				wrapper.append(button);
 			});
 		</script>
 
