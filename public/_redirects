@@ -1,0 +1,6 @@
+# Preserve the previously published English Clawdbot URL.
+/en/2026/01/clawdbot-notes/  /en/2026/01/clawdbot-moltbot-rename-drama/  301
+
+# Localized not-found pages. Existing static files take precedence on Netlify.
+/en/*  /en/404/  404
+/*     /404.html 404

@@ -97,6 +97,11 @@ body .desktop .window .window-body {
   margin: 10px 0;
 }
 
+.article-content img[role='button']:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 3px;
+}
+
 /* 文章表格：98 风格边框；超宽时在表格内部横向滚动，避免撑破布局 */
 .article-content table {
   display: block;
@@ -268,6 +273,10 @@ body .desktop .window .window-body {
   align-items: center;
 }
 
+.lightbox-overlay[hidden] {
+  display: none !important;
+}
+
 .lightbox-overlay.active {
   display: flex;
 }
@@ -300,8 +309,8 @@ body .desktop .window .window-body {
 }
 
 .lightbox-close-btn {
-  min-width: 16px;
-  min-height: 14px;
+	min-width: 24px;
+	min-height: 24px;
   padding: 0;
   font-size: 10px;
   line-height: 1;
@@ -340,7 +349,7 @@ body .desktop .window .window-body {
 
 /* Lightbox caption for alt text display */
 .lightbox-caption {
-  display: none;
+  display: block;
   margin-top: 8px;
   padding: 8px 12px;
   background: var(--tooltip-bg);
@@ -353,4 +362,14 @@ body .desktop .window .window-body {
   max-width: 85vw;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+.lightbox-caption[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-btn {
+    transition: none;
+  }
 }

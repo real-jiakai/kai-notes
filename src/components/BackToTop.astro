@@ -12,6 +12,7 @@ const t = useTranslations(lang);
 ---
 
 <button
+	type="button"
 	id="back-to-top"
 	class="back-to-top"
 	aria-label={t('backToTop')}
@@ -69,6 +70,12 @@ const t = useTranslations(lang);
 			font-size: 16px;
 		}
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.back-to-top {
+			transition: none;
+		}
+	}
 </style>
 
 <script>
@@ -83,13 +90,14 @@ const t = useTranslations(lang);
 	}
 
 	// Check on scroll
-	window.addEventListener('scroll', toggleVisibility);
+	window.addEventListener('scroll', toggleVisibility, { passive: true });
 
 	// Check on page load
 	toggleVisibility();
 
 	// Scroll to top on click
 	backToTopButton?.addEventListener('click', () => {
-		window.scrollTo({ top: 0, behavior: 'smooth' });
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
 	});
 </script>

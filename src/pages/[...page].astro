@@ -190,8 +190,8 @@ const nextUrl = page.url.next && withTrailingSlash(page.url.next);
 	</head>
 	<body>
 		<Navigation lang={lang} />
-		<h1 class="sr-only">{pageTitle}</h1>
-		<div class="desktop">
+		<main id="main-content" class="desktop" tabindex="-1">
+			<h1 class="sr-only">{pageTitle}</h1>
 			<div class="window">
 				<div class="title-bar">
 					<div class="title-bar-text">{titleBarText}</div>
@@ -218,27 +218,27 @@ const nextUrl = page.url.next && withTrailingSlash(page.url.next);
 					</div>
 
 					{page.lastPage > 1 && (
-						<div class="pagination">
+						<nav class="pagination" aria-label={t('pagination.label')}>
 							{prevUrl && (
-								<a href={prevUrl} class="button">{t('pagination.prev')}</a>
+								<a href={prevUrl} class="button" rel="prev">{t('pagination.prev')}</a>
 							)}
 
 							{Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => (
 								pageNum === page.currentPage ? (
-									<span class="current">{pageNum}</span>
+									<span class="current" aria-current="page" aria-label={t('pagination.page', { page: pageNum })}>{pageNum}</span>
 								) : (
-									<a href={pageNum === 1 ? '/' : `/${pageNum}/`}>{pageNum}</a>
+									<a href={pageNum === 1 ? '/' : `/${pageNum}/`} aria-label={t('pagination.page', { page: pageNum })}>{pageNum}</a>
 								)
 							))}
 
 							{nextUrl && (
-								<a href={nextUrl} class="button">{t('pagination.next')}</a>
+								<a href={nextUrl} class="button" rel="next">{t('pagination.next')}</a>
 							)}
-						</div>
+						</nav>
 					)}
 				</div>
 			</div>
-		</div>
+		</main>
 		<Footer lang={lang} />
 		<BackToTop lang={lang} />
 	</body>

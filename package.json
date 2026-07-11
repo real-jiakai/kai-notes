@@ -1,38 +1,52 @@
 {
-  "name": "astro-blog",
+  "name": "kai-notes",
   "type": "module",
   "version": "0.0.1",
+  "private": true,
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": "24.18.0",
+    "pnpm": "10.34.5"
+  },
   "scripts": {
-    "sync:assets": "cp node_modules/98.css/dist/98.css public/98.css && esbuild scripts/feed-style.js --minify --outfile=public/feed-style.js",
+    "sync:assets": "node scripts/sync-assets.mjs",
+    "check:images": "node scripts/image-dimensions.mjs --check",
+    "images:refresh": "node scripts/image-dimensions.mjs --refresh",
+    "check": "pnpm check:images && astro check",
     "dev": "pnpm sync:assets && astro dev",
-    "build": "pnpm sync:assets && astro build",
+    "build": "pnpm check && pnpm sync:assets && astro build && node scripts/finalize-headers.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "98.css": "^0.1.21",
-    "@astrojs/markdown-satteri": "^0.3.2",
-    "@astrojs/mdx": "^7.0.1",
+    "@astrojs/markdown-satteri": "^0.3.3",
+    "@astrojs/mdx": "^7.0.2",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^7.0.5",
+    "astro": "^7.0.7",
     "markdown-it": "^14.3.0",
-    "sanitize-html": "^2.17.5",
-    "sharp": "^0.34.5"
+    "sanitize-html": "^2.17.6"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@types/markdown-it": "^14.1.2",
     "@types/sanitize-html": "^2.16.1",
     "esbuild": "^0.28.1",
+    "sharp": "^0.35.3",
     "typescript": "^6.0.3"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ],
     "overrides": {
-      "smol-toml@<1.6.1": ">=1.6.1",
-      "yaml@>=2.0.0 <2.8.3": ">=2.8.3",
-      "postcss@<8.5.10": ">=8.5.10",
-      "js-yaml@>=4.0.0 <4.2.0": ">=4.2.0"
+      "smol-toml@<1.6.1": "1.6.1",
+      "yaml@>=2.0.0 <2.8.3": "2.8.3",
+      "postcss@<8.5.10": "8.5.10",
+      "js-yaml@>=4.0.0 <4.2.0": "4.2.0"
     }
   }
 }

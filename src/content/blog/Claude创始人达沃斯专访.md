@@ -3,10 +3,9 @@ title: 'Claude创始人达沃斯专访：当程序员不再需要「写」代码
 description: 'Anthropic创始人达沃斯最新专访解读：Claude的真实实力、中国开源的崛起、以及我们普通人该如何应对'
 pubDate: 2026-01-22
 slug: 'dario-amodei-davos-interview'
+heroImage: 'https://cdn.sa.net/2026/01/22/ioNbRaxZGSFMWjz.webp'
 draft: false
 ---
-
-# Claude创始人达沃斯专访：当程序员不再需要「写」代码
 
 > Anthropic创始人达沃斯最新专访解读：Claude的真实实力、中国开源的崛起、以及我们普通人该如何应对
 

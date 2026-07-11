@@ -1,12 +1,12 @@
 ---
 title: "AIGC Plagiarism Detection: CNKI's Self-Contradiction and a Doomed Battle of Containment"
+seoTitle: "AIGC Detection and CNKI's Self-Contradiction"
 description: 'The academic controversy and reflections sparked by AIGC plagiarism detection during the 2026 graduation season'
 pubDate: 2026-04-01
+heroImage: 'https://i.see.you/2026/04/02/fS1s/20260401195613640.webp'
 lang: 'en'
 draft: false
 ---
-
-# AIGC Plagiarism Detection: CNKI's Self-Contradiction and a Doomed Battle of Containment
 
 > Selling AI tools to help you write papers with one hand, penalizing you for using AI with the other — CNKI, whose side are you on?
 

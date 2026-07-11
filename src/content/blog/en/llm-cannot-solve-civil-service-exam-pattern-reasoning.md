@@ -1,12 +1,13 @@
 ---
 title: "The World's Most Powerful AIs All Failed: Pattern Reasoning Becomes LLMs' Cognitive Graveyard"
+seoTitle: 'Why Top AI Models Fail at Visual Pattern Reasoning'
 description: "On the eve of the provincial civil service exam, I tested GPT 5.4 Pro, Gemini 3, Claude Opus 4.6 and other top AIs on pattern reasoning questions. They all failed spectacularly — some even resorted to searching for answers online. What fatal blind spot does this expose in current AI?"
+seoDescription: 'GPT-5.4, Gemini 3, Claude Opus 4.6, and Doubao fail civil-service visual reasoning questions, exposing a major multimodal AI blind spot.'
 pubDate: 2026-03-14
+heroImage: 'https://i.see.you/2026/03/14/1Fza/20260314031128678.webp'
 lang: 'en'
 draft: false
 ---
-
-# The World's Most Powerful AIs All Failed: Pattern Reasoning Becomes LLMs' Cognitive Graveyard
 
 ## An Accidental "Crash Test"
 
@@ -14,7 +15,7 @@ March 14, 2026 — the provincial civil service exam is just days away. Out of c
 
 The result? **A total wipeout.**
 
-What made it even more laughable was that Gemini 3 Deep Think — the model that supposedly crushes human experts on the "Human Last Exam" — started spouting nonsense when faced with these entry-level civil service exam pattern questions. Meanwhile, GPT 5.4 Pro and Doubao took the "smarter" approach: they simply triggered web searches to look up the original questions and answers from exam prep websites.
+What made it even more laughable was that Gemini 3 Deep Think — the model that supposedly crushes human experts on "Humanity's Last Exam" — started spouting nonsense when faced with these entry-level civil service exam pattern questions. Meanwhile, GPT 5.4 Pro and Doubao took the "smarter" approach: they simply triggered web searches to look up the original questions and answers from exam prep websites.
 
 **That's not problem-solving. That's cheating.**
 

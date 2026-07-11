@@ -3,10 +3,9 @@ title: '🦞 Clawdbot → Moltbot：一场72小时的互联网闹剧'
 description: '60000星开源项目被迫改名、10秒内被加密骗子抢注、1600万美元假代币崩盘——这场72小时的互联网风暴，暴露了AI时代开源生态的脆弱与荒诞'
 pubDate: 2026-01-28
 slug: 'clawdbot-moltbot-rename-drama'
+heroImage: 'https://kimi-web-img.moonshot.cn/img/linux.do/81c597191be3bfce2b07b0a3a5d8fec972e5511a.png'
 draft: false
 ---
-
-# 🦞 Clawdbot → Moltbot：一场72小时的互联网闹剧
 
 ## 第一章：一夜爆红的开源明星
 
@@ -196,6 +195,6 @@ Anthropic 的 slogan 是“AI safety”，但他们似乎更擅长“developer h
 
 - 新项目主页：[molt.bot](https://molt.bot)
 - GitHub：[github.com/moltbot](https://github.com/moltbot)
-- X 账号：[@moltbot](https://x.com/moltbot)
+- X 账号：@moltbot（原账号链接已失效）
 
 *这就是开源 AI 世界的现实：一夜爆红、法律威胁、加密货币骗局、安全漏洞——全部在72小时内发生。* 🦞💥

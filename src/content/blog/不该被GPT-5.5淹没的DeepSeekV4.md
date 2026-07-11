@@ -3,6 +3,8 @@ title: '不该被 GPT-5.5 淹没的 DeepSeek V4'
 description: 'GPT-5.5 同日发布抢尽风头，但 DeepSeek V4 的 1M 上下文召回与 1.6T 参数的开源旗舰，其价值与贡献不该被掩盖。'
 pubDate: 2026-04-27
 slug: 'the-other-launch'
+heroImage: 'https://i.see.you/2026/04/27/xq5U/20260427041004089.webp'
+draft: false
 ---
 
 ## 背景故事

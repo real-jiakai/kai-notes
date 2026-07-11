@@ -1,8 +1,28 @@
 /*!
  * feed-style.js — renders this site's RSS feeds as a human-friendly page in browsers.
- * Based on rss-style.js by Andrew Marcuse, https://www.rss.style/ (MIT License).
+ * Based on RSS.Style by Andrew Marcuse, https://www.rss.style/.
  * Adapted for blog.gujiakai.me: Win98 look via /98.css + /theme.css, zh/en UI, light/dark theme.
  * Feed readers ignore this script element; it only runs when a browser renders the XML.
+ *
+ * Copyright (c) 2024-2026 Andrew Marcuse
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 (function () {
 	'use strict';
@@ -15,6 +35,8 @@
 			intro: '这是本站的 RSS 订阅源，供 RSS 阅读器使用，不是普通网页。把下面的链接复制到你的 RSS 阅读器即可订阅本站更新。',
 			copy: '复制',
 			copied: '已复制！',
+			copyFailed: '复制失败，请手动复制',
+			feedUrl: 'RSS 订阅地址',
 			visit: '访问网站 →',
 			recent: '最近更新',
 			count: function (n) { return n + ' 篇文章'; },
@@ -26,6 +48,8 @@
 			intro: 'This is the RSS feed for this site, meant for RSS readers rather than browsers. Copy the link below into your news reader to subscribe.',
 			copy: 'Copy',
 			copied: 'Copied!',
+			copyFailed: 'Copy failed — copy manually',
+			feedUrl: 'RSS feed URL',
 			visit: 'Visit Website →',
 			recent: 'Recent Posts',
 			count: function (n) { return n + (n === 1 ? ' post' : ' posts'); },
@@ -49,6 +73,7 @@
 		'.post-list li:last-child { border-bottom: none; }',
 		'.post-date { color: var(--text-muted); font-size: 0.9em; margin: 0.15em 0; }',
 		'.post-desc { color: var(--text-secondary); margin: 0.25em 0 0; }',
+		'.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }',
 	].join('\n');
 
 	function el(tag, attrs, children) {
@@ -134,22 +159,43 @@
 			windowBody.appendChild(el('p', { class: 'post-desc' }, [feedDescription]));
 		}
 
-		var urlInput = el('input', { type: 'text', readonly: 'readonly', value: window.location.href });
+		var urlInput = el('input', {
+			type: 'text',
+			readonly: 'readonly',
+			value: window.location.href,
+			'aria-label': t.feedUrl,
+		});
 		var copyBtn = el('button', { type: 'button' }, [t.copy]);
+		var copyStatus = el('span', { class: 'sr-only', role: 'status', 'aria-live': 'polite' });
+		var copyResetTimer = 0;
+		var statusTimer = 0;
 		copyBtn.addEventListener('click', function () {
-			function done() {
-				copyBtn.textContent = t.copied;
-				setTimeout(function () {
+			function showResult(label) {
+				copyBtn.textContent = label;
+				copyStatus.textContent = '';
+				window.clearTimeout(statusTimer);
+				statusTimer = window.setTimeout(function () {
+					copyStatus.textContent = label;
+				}, 30);
+				window.clearTimeout(copyResetTimer);
+				copyResetTimer = window.setTimeout(function () {
 					copyBtn.textContent = t.copy;
 				}, 2000);
+			}
+			function done() {
+				showResult(t.copied);
+			}
+			function failed() {
+				showResult(t.copyFailed);
 			}
 			function fallback() {
 				urlInput.focus();
 				urlInput.select();
 				try {
-					document.execCommand('copy');
-					done();
-				} catch (e) {}
+					document.execCommand('copy') ? done() : failed();
+				} catch (e) {
+					failed();
+				}
 			}
 			if (navigator.clipboard && navigator.clipboard.writeText) {
 				navigator.clipboard.writeText(urlInput.value).then(done, fallback);
@@ -157,7 +203,7 @@
 				fallback();
 			}
 		});
-		var urlRow = el('div', { class: 'feed-url-row' }, [urlInput, copyBtn]);
+		var urlRow = el('div', { class: 'feed-url-row' }, [urlInput, copyBtn, copyStatus]);
 		if (homeLink) {
 			var visitBtn = el('button', { type: 'button' }, [t.visit]);
 			visitBtn.addEventListener('click', function () {
@@ -186,10 +232,10 @@
 				el('div', { class: 'window feed-window' }, [
 					el('div', { class: 'title-bar' }, [
 						el('div', { class: 'title-bar-text' }, [pageTitle]),
-						el('div', { class: 'title-bar-controls' }, [
-							el('button', { 'aria-label': 'Minimize', tabindex: '-1' }),
-							el('button', { 'aria-label': 'Maximize', tabindex: '-1' }),
-							el('button', { 'aria-label': 'Close', tabindex: '-1' }),
+						el('div', { class: 'title-bar-controls', 'aria-hidden': 'true' }, [
+							el('button', { type: 'button', 'aria-label': 'Minimize', tabindex: '-1', disabled: 'disabled' }),
+							el('button', { type: 'button', 'aria-label': 'Maximize', tabindex: '-1', disabled: 'disabled' }),
+							el('button', { type: 'button', 'aria-label': 'Close', tabindex: '-1', disabled: 'disabled' }),
 						]),
 					]),
 					windowBody,

@@ -2,8 +2,9 @@
 title: 'Let Yourself Feel "Learned Helplessness" for a While'
 description: 'A note to myself when I feel trapped in learned helplessness, and to anyone else who feels lost.'
 pubDate: 2026-04-14
-draft: false
+heroImage: 'https://i.see.you/2026/04/14/q7tE/20260413211924172.webp'
 lang: 'en'
+draft: false
 ---
 
 For a while after the Qingming Festival, I became sluggish and drained.

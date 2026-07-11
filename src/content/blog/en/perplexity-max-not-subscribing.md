@@ -2,6 +2,7 @@
 title: "Perplexity Max Is Great, But I Won't Subscribe"
 description: "Model Council and Computer are genuinely impressive, but is a $200/month multi-model agent really worth paying for?"
 pubDate: 2026-03-12
+heroImage: 'https://i.see.you/2026/03/12/wI6b/20260311211253767.webp'
 lang: 'en'
 draft: false
 ---
@@ -20,7 +21,7 @@ This article will focus on the two most noteworthy features — **Model Council*
 
 ## I. Model Council: Three Models Argue, a Fourth Judges
 
-### What It Actually Is
+### What Model Council Actually Is
 
 Model Council launched on February 5, 2026 as an exclusive multi-model research feature for Perplexity Max members.
 
@@ -50,7 +51,7 @@ Model Council's value lies in convenience and structured presentation, but it pr
 
 ## II. Perplexity Computer: 19 Models, One "Digital Employee"
 
-### What It Actually Is
+### What Perplexity Computer Actually Is
 
 Perplexity Computer launched for consumers on February 25, with the enterprise version and "Personal Computer" local agent announced at Ask 2026 on March 11.
 

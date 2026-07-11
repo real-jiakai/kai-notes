@@ -3,10 +3,9 @@ title: '凌晨2点半的灵感：Google最火AI模型为什么叫“纳米香蕉
 description: 'Google DeepMind的图像生成模型Nano Banana为什么叫这个奇怪的名字？原来是产品经理凌晨2:30被催着交代号，随口把自己的两个外号拼在一起。一个玩笑般的命名，最终成为全球最出圈的AI产品名之一。'
 pubDate: 2026-01-18
 slug: 'how-nano-banana-got-its-name'
+heroImage: 'https://cdn.sa.net/2026/01/18/27nFLT9kPYlCatV.webp'
 draft: false
 ---
-
-# 凌晨2点半的灵感：Google最火AI模型为什么叫“纳米香蕉”？
 
 ![Nano Banana Pro生成的Google Logo香蕉图](https://cdn.sa.net/2026/01/18/27nFLT9kPYlCatV.webp)
 

@@ -1,12 +1,13 @@
 ---
 title: "2:30 AM Inspiration: Why Google's Hottest AI Model Is Called 'Nano Banana'"
+seoTitle: "Why Google's AI Model Is Called Nano Banana"
 description: "Why is Google DeepMind's image generation model called Nano Banana? Turns out a product manager, pressured to submit a codename at 2:30 AM, casually combined her two nicknames. A joke-like naming decision became one of the most viral AI product names ever."
+seoDescription: "The story behind Google's Nano Banana name: a late-night nickname that became the identity of one of its most popular AI image models."
 pubDate: 2026-01-18
+heroImage: 'https://cdn.sa.net/2026/01/18/27nFLT9kPYlCatV.webp'
 lang: 'en'
 draft: false
 ---
-
-# 2:30 AM Inspiration: Why Google's Hottest AI Model Is Called "Nano Banana"
 
 ![Nano Banana Pro Generated Google Logo Banana Image](https://cdn.sa.net/2026/01/18/27nFLT9kPYlCatV.webp)
 

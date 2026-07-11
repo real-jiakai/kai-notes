@@ -1,12 +1,12 @@
 ---
 title: 'Clawdbot to Moltbot: A 72-Hour Internet Drama'
 description: 'A 60,000-star open source project forced to rename, hijacked by crypto scammers within 10 seconds, a $16 million fake token crash - this 72-hour storm exposed the fragility and absurdity of the open source ecosystem in the AI era'
+seoDescription: 'How a 60,000-star AI project was forced to rename, hijacked by scammers, and caught in a $16 million fake-token crash within 72 hours.'
 pubDate: 2026-01-28
-draft: false
+heroImage: 'https://kimi-web-img.moonshot.cn/img/linux.do/81c597191be3bfce2b07b0a3a5d8fec972e5511a.png'
 lang: 'en'
+draft: false
 ---
-
-# Clawdbot to Moltbot: A 72-Hour Internet Drama
 
 ## Chapter 1: An Overnight Open Source Sensation
 
@@ -196,6 +196,6 @@ Once the trust of the open source community is lost, it's hard to rebuild. Anthr
 
 - New project homepage: [molt.bot](https://molt.bot)
 - GitHub: [github.com/moltbot](https://github.com/moltbot)
-- X account: [@moltbot](https://x.com/moltbot)
+- X account: @moltbot (the former account link is no longer active)
 
 *This is the reality of the open source AI world: overnight fame, legal threats, crypto scams, security vulnerabilities — all within 72 hours.* 🦞💥

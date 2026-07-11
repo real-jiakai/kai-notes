@@ -3,6 +3,7 @@ title: 'Perplexity Max 很好，但我不会订阅'
 description: 'Model Council 和 Computer 确实惊艳，但 $200/月的多模型智能体，真的值得买单吗？'
 pubDate: 2026-03-12
 slug: 'perplexity-max-not-subscribing'
+heroImage: 'https://i.see.you/2026/03/12/wI6b/20260311211253767.webp'
 draft: false
 ---
 
@@ -20,7 +21,7 @@ draft: false
 
 ## 一、Model Council：三个模型吵架，第四个裁判
 
-### 它到底是什么
+### Model Council 到底是什么
 
 Model Council 于 2026 年 2 月 5 日上线，是 Perplexity Max 会员专属的多模型研究功能。
 
@@ -50,7 +51,7 @@ Model Council 的价值在于便利性和结构化呈现，但它并没有提供
 
 ## 二、Perplexity Computer：19 个模型，一个「数字员工」
 
-### 它到底是什么
+### Perplexity Computer 到底是什么
 
 Perplexity Computer 于 2 月 25 日面向消费者上线，3 月 11 日在 Ask 2026 上发布了企业版和「Personal Computer」本地智能体版本。
 

@@ -1,0 +1,108 @@
+---
+import BaseHead from './BaseHead.astro';
+import Navigation from './Navigation.astro';
+import Footer from './Footer.astro';
+import BackToTop from './BackToTop.astro';
+import { SITE_TITLE_I18N } from '../consts';
+import { getLocalePath, useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const homePath = getLocalePath(lang, '/');
+const pageTitle = `${t('notFound.title')} - ${SITE_TITLE_I18N[lang]}`;
+---
+
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+	<head>
+		<BaseHead title={pageTitle} description={t('notFound.description')} noindex />
+	</head>
+	<body>
+		<Navigation lang={lang} />
+		<main id="main-content" class="desktop" tabindex="-1">
+			<div class="window">
+				<div class="title-bar">
+					<div class="title-bar-text">{t('notFound.title')}</div>
+				</div>
+				<div class="window-body">
+					<h1>404 — {t('notFound.title')}</h1>
+					<p>{t('notFound.description')}</p>
+					<a class="button" href={homePath}>{t('notFound.home')}</a>
+				</div>
+			</div>
+		</main>
+		<Footer lang={lang} />
+		<BackToTop lang={lang} />
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		background: var(--desktop);
+		font-family: 'MS Sans Serif', sans-serif;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.desktop {
+		width: 100%;
+		box-sizing: border-box;
+		max-width: 840px;
+		margin: 0 auto;
+		padding: 0 20px;
+		flex: 1;
+	}
+
+	.window {
+		margin-bottom: 20px;
+	}
+
+	.window-body {
+		padding: 32px 20px;
+		text-align: center;
+	}
+
+	h1 {
+		margin: 0 0 16px;
+		color: var(--heading);
+		font-size: 24px;
+	}
+
+	p {
+		margin: 0 0 24px;
+		line-height: 1.6;
+	}
+
+	.button {
+		display: inline-block;
+		color: var(--text);
+		text-decoration: none;
+	}
+
+	@media (max-width: 600px) {
+		.desktop {
+			padding: 0 12px;
+		}
+
+		.window-body {
+			padding: 24px 12px;
+		}
+
+		h1 {
+			font-size: 20px;
+		}
+	}
+</style>

@@ -1,0 +1,10 @@
+[build]
+  command = "pnpm build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24.18.0"
+  PNPM_VERSION = "10.34.5"
+
+[context.production.environment]
+  SITE_URL = "https://blog.gujiakai.me"

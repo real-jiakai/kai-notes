@@ -2,6 +2,7 @@
 title: 'AI News - July 30, 2025'
 description: 'AI News Roundup for July 30, 2025'
 pubDate: 2025-07-30
+heroImage: 'https://cdn.sa.net/2025/07/30/Glty2OPrNMJC3kD.webp'
 lang: 'en'
 draft: false
 ---
@@ -16,7 +17,7 @@ Qwen3-30B-A3B recently released a minor update version called Qwen3-30B-A3B-Inst
 - Expanded multilingual knowledge coverage
 - Improved long-context understanding, supporting up to 256K tokens
 - Better alignment with user intent and handling of open-ended tasks
-- Removed <think> blocks for more direct and efficient responses
+- Removed `<think>` blocks for more direct and efficient responses
 
 This update makes the model smarter, faster, and easier to deploy locally, suitable for various complex tasks such as instruction following, logical reasoning, and tool use.
 
@@ -56,9 +57,9 @@ https://blog.google/technology/google-labs/notebooklm-video-overviews-studio-upg
 
 https://blog.google/products/search/ai-mode-updates-back-to-school/
 
-3. Claude Code --add-dir Command
+3. Claude Code `--add-dir` Command
 
-Claude Code recently introduced the --add-dir command, a feature extension that allows users to work across multiple directories in a single session. By using the CLI flag --add-dir <path> at startup or the slash command /add-dir <path> during a session, developers can seamlessly add additional working directories to Claude Code's workspace without switching the main directory. This update is particularly useful for working with monorepos, shared configurations, or cross-project collaboration, helping improve code navigation, referencing, and editing efficiency, making Claude Code an even more powerful and flexible terminal AI coding tool.
+Claude Code recently introduced the `--add-dir` command, a feature extension that allows users to work across multiple directories in a single session. By using the CLI flag `--add-dir <path>` at startup or the slash command `/add-dir <path>` during a session, developers can seamlessly add additional working directories to Claude Code's workspace without switching the main directory. This update is particularly useful for working with monorepos, shared configurations, or cross-project collaboration, helping improve code navigation, referencing, and editing efficiency, making Claude Code an even more powerful and flexible terminal AI coding tool.
 
 > Commentary: Claude Code has become the most popular product among developers. The cross-directory feature further elevates the experience. Anthropic deserves praise for developing products based on user needs.
 

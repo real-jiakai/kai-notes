@@ -1,12 +1,13 @@
 ---
 title: "2025: The Year LLMs Changed Everything - A Deep Dive into Simon Willison's Year-End Review"
+seoTitle: "Simon Willison's 2025 Year in LLMs"
 description: "An analysis of Django co-founder Simon Willison's 2025 LLM year-end summary: reasoning models changed everything, Claude Code hit $1B ARR, Chinese open-source models dominated the rankings, OpenAI lost its lead, and $200/month subscriptions became the new standard."
+seoDescription: "Simon Willison's 2025 LLM review: reasoning models, coding agents, local AI, slop, pricing shifts, and the trends shaping practical AI."
 pubDate: 2026-01-01
+heroImage: 'https://cdn.sa.net/2026/01/01/x4k1s3bDohnzfaS.webp'
 lang: 'en'
 draft: false
 ---
-
-# 2025: The Year LLMs Changed Everything - A Deep Dive into Simon Willison's Year-End Review
 
 > **Original Article**: [2025: The year in LLMs](https://simonwillison.net/2025/Dec/31/the-year-in-llms/) - Simon Willison
 >

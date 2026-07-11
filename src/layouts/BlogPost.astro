@@ -18,15 +18,36 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	headings?: MarkdownHeading[];
 };
 
-const { title, description, pubDate, updatedDate, prevPost, nextPost, lang: propLang, headings } =
-	Astro.props;
+const {
+	title,
+	description,
+	seoTitle,
+	seoDescription,
+	pubDate,
+	updatedDate,
+	heroImage,
+	prevPost,
+	nextPost,
+	lang: propLang,
+	headings,
+} = Astro.props;
 const lang = propLang || getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const socialImage = typeof heroImage === 'string' ? heroImage : heroImage?.src;
 ---
 
 <html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
 	<head>
-		<BaseHead title={title} description={description} pubDate={pubDate} updatedDate={updatedDate} />
+		<BaseHead
+			title={title}
+			description={description}
+			seoTitle={seoTitle}
+			seoDescription={seoDescription}
+			pubDate={pubDate}
+			updatedDate={updatedDate}
+			image={socialImage}
+			imageAlt={title}
+		/>
 		<style>
 			html, body {
 				height: 100%;
@@ -197,16 +218,16 @@ const t = useTranslations(lang);
 
 	<body>
 		<Navigation lang={lang} />
-		<div class="desktop">
+		<main id="main-content" class="desktop" tabindex="-1">
 			<!-- 目录放在正文前：键盘用户不必先穿过全文才能到达；视觉位置由绝对定位决定，不受 DOM 顺序影响 -->
 			<TableOfContents headings={headings ?? []} lang={lang} />
-			<div class="window">
+			<article class="window" aria-labelledby="article-title">
 				<div class="title-bar">
 					<div class="title-bar-text">{t('article.reading')}</div>
 				</div>
 				<div class="window-body">
-					<div class="article-header">
-						<h1 class="article-title">{title}</h1>
+					<header class="article-header">
+						<h1 class="article-title" id="article-title">{title}</h1>
 						<div class="article-date">
 							{t('article.published')}: <FormattedDate date={pubDate} lang={lang} />
 						</div>
@@ -215,18 +236,19 @@ const t = useTranslations(lang);
 								{t('article.updated')}: <FormattedDate date={updatedDate} lang={lang} />
 							</div>
 						)}
-					</div>
+					</header>
 					<div
 						class="article-content"
 						data-label-copy={t('code.copy')}
 						data-label-copied={t('code.copied')}
 						data-label-copy-failed={t('code.copyFailed')}
+						data-label-open-image={t('lightbox.open')}
 					>
 						<slot />
 					</div>
 					<!-- 复制按钮的读屏播报区：aria-label 变化对未聚焦按钮不播报，live region 才可靠 -->
 					<div id="copy-feedback" role="status" class="sr-only"></div>
-					<div class="article-navigation">
+					<nav class="article-navigation" aria-label={t('article.navigation')}>
 						<div>
 							{prevPost ? (
 								<a href={getPostPath(prevPost)} class="nav-link" title={prevPost.data.title}>
@@ -245,27 +267,34 @@ const t = useTranslations(lang);
 								<div class="nav-placeholder"></div>
 							)}
 						</div>
-					</div>
+					</nav>
 					<!-- Comments Section（utterances 动态注入，初始主题跟随当前模式） -->
-					<div class="article-comments">
-						<h3 class="comments-title">{t('comments.title')}</h3>
+					<section class="article-comments" aria-labelledby="comments-title">
+						<h2 class="comments-title" id="comments-title">{t('comments.title')}</h2>
 						<div id="utterances-container"></div>
-					</div>
+					</section>
 				</div>
-			</div>
-		</div>
+			</article>
+		</main>
 		<Footer lang={lang} />
 
 		<!-- Lightbox 图片放大浮层 -->
-		<div class="lightbox-overlay" id="lightbox">
-			<div class="lightbox-window">
+		<div class="lightbox-overlay" id="lightbox" hidden>
+			<div
+				class="lightbox-window"
+				id="lightbox-dialog"
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="lightbox-title"
+				tabindex="-1"
+			>
 				<div class="lightbox-title-bar">
-					<span class="lightbox-title-bar-text">{t('lightbox.preview')}</span>
-					<button class="lightbox-close-btn" id="lightbox-close" aria-label={t('lightbox.close')}>×</button>
+					<span class="lightbox-title-bar-text" id="lightbox-title">{t('lightbox.preview')}</span>
+					<button type="button" class="lightbox-close-btn" id="lightbox-close" aria-label={t('lightbox.close')}>×</button>
 				</div>
 				<figure class="lightbox-body">
-					<img id="lightbox-img" src="" alt={t('lightbox.preview')} />
-					<figcaption id="lightbox-caption" class="lightbox-caption"></figcaption>
+					<img id="lightbox-img" alt={t('lightbox.preview')} />
+					<figcaption id="lightbox-caption" class="lightbox-caption" hidden></figcaption>
 				</figure>
 			</div>
 		</div>
@@ -288,48 +317,144 @@ const t = useTranslations(lang);
 				utterancesContainer.appendChild(utterances);
 			}
 
-			// Lightbox 功能
-			const lightbox = document.getElementById('lightbox');
-			const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
-			const lightboxCaption = document.getElementById('lightbox-caption');
-			const closeBtn = document.getElementById('lightbox-close');
-			// 服务端已按语言渲染初始 alt，作为无 alt 图片的本地化兜底
-			const fallbackAlt = lightboxImg.alt;
+			// Lightbox：完整的键盘、焦点与模态背景管理。
+			const lightbox = document.getElementById('lightbox') as HTMLElement | null;
+			const lightboxDialog = document.getElementById('lightbox-dialog') as HTMLElement | null;
+			const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+			const lightboxCaption = document.getElementById('lightbox-caption') as HTMLElement | null;
+			const closeBtn = document.getElementById('lightbox-close') as HTMLButtonElement | null;
+			const articleContent = document.querySelector('.article-content') as HTMLElement | null;
+			const fallbackAlt = lightboxImg?.alt || 'Image preview';
+			const openImageLabel = articleContent?.dataset.labelOpenImage || 'Open image preview: {alt}';
+			const focusableSelector = [
+				'a[href]',
+				'button:not([disabled])',
+				'input:not([disabled])',
+				'select:not([disabled])',
+				'textarea:not([disabled])',
+				'[tabindex]:not([tabindex="-1"])',
+			].join(',');
 
-			// 为所有文章图片添加点击事件
-			document.querySelectorAll('.article-content img').forEach(img => {
-				img.addEventListener('click', (e) => {
-					const target = e.target as HTMLImageElement;
-					lightboxImg.src = target.src;
-					const altText = target.alt?.trim();
-					lightboxImg.alt = altText || fallbackAlt;
-					// Display alt text as caption
-					if (lightboxCaption) {
-						lightboxCaption.textContent = altText || '';
-						lightboxCaption.style.display = altText ? 'block' : 'none';
+			let lightboxTrigger: HTMLElement | null = null;
+			let inertBackground: HTMLElement[] = [];
+			let previousBodyOverflow = '';
+			let previousBodyPaddingRight = '';
+
+			const lightboxIsOpen = () => Boolean(lightbox && !lightbox.hidden);
+
+			function lockBackground() {
+				if (!lightbox) return;
+				previousBodyOverflow = document.body.style.overflow;
+				previousBodyPaddingRight = document.body.style.paddingRight;
+				const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+				document.body.style.overflow = 'hidden';
+				if (scrollbarWidth > 0) {
+					document.body.style.paddingRight = `${scrollbarWidth}px`;
+				}
+
+				inertBackground = Array.from(document.body.children).filter(
+					(element): element is HTMLElement =>
+						element instanceof HTMLElement && element !== lightbox && !element.hasAttribute('inert')
+				);
+				inertBackground.forEach((element) => element.setAttribute('inert', ''));
+			}
+
+			function unlockBackground() {
+				inertBackground.forEach((element) => element.removeAttribute('inert'));
+				inertBackground = [];
+				document.body.style.overflow = previousBodyOverflow;
+				document.body.style.paddingRight = previousBodyPaddingRight;
+			}
+
+			function openLightbox(trigger: HTMLImageElement) {
+				if (!lightbox || !lightboxDialog || !lightboxImg || !closeBtn) return;
+				const source = trigger.currentSrc || trigger.src;
+				if (!source) return;
+
+				lightboxTrigger = trigger;
+				const altText = trigger.alt?.trim() || '';
+				lightboxImg.src = source;
+				lightboxImg.alt = altText || fallbackAlt;
+				if (lightboxCaption) {
+					lightboxCaption.textContent = altText;
+					lightboxCaption.hidden = !altText;
+				}
+
+				lightbox.hidden = false;
+				lightbox.classList.add('active');
+				lockBackground();
+				window.requestAnimationFrame(() => closeBtn.focus());
+			}
+
+			function closeLightbox() {
+				if (!lightboxIsOpen() || !lightbox || !lightboxImg) return;
+				lightbox.classList.remove('active');
+				lightbox.hidden = true;
+				lightboxImg.removeAttribute('src');
+				if (lightboxCaption) {
+					lightboxCaption.textContent = '';
+					lightboxCaption.hidden = true;
+				}
+				unlockBackground();
+
+				const trigger = lightboxTrigger;
+				lightboxTrigger = null;
+				if (trigger?.isConnected) {
+					trigger.focus({ preventScroll: true });
+				}
+			}
+
+			// Article images behave as buttons unless the author already placed one inside a link/button.
+			document.querySelectorAll<HTMLImageElement>('.article-content img').forEach((image) => {
+				if (image.closest('a[href], button')) return;
+				const altText = image.alt?.trim() || fallbackAlt;
+				image.tabIndex = 0;
+				image.setAttribute('role', 'button');
+				image.setAttribute('aria-haspopup', 'dialog');
+				image.setAttribute('aria-controls', 'lightbox-dialog');
+				image.setAttribute('aria-label', openImageLabel.replace('{alt}', altText));
+				image.addEventListener('click', () => openLightbox(image));
+				image.addEventListener('keydown', (event) => {
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();
+						openLightbox(image);
 					}
-					lightbox?.classList.add('active');
 				});
 			});
 
-			// 关闭 lightbox
-			function closeLightbox() {
-				lightbox?.classList.remove('active');
-			}
-
 			closeBtn?.addEventListener('click', closeLightbox);
 
-			// 点击遮罩层关闭
-			lightbox?.addEventListener('click', (e) => {
-				if (e.target === lightbox) {
-					closeLightbox();
-				}
+			// Clicking only the backdrop (not the dialog itself) dismisses it.
+			lightbox?.addEventListener('click', (event) => {
+				if (event.target === lightbox) closeLightbox();
 			});
 
-			// ESC 键关闭
-			document.addEventListener('keydown', (e) => {
-				if (e.key === 'Escape' && lightbox?.classList.contains('active')) {
+			document.addEventListener('keydown', (event) => {
+				if (!lightboxIsOpen() || !lightboxDialog) return;
+				if (event.key === 'Escape') {
+					event.preventDefault();
 					closeLightbox();
+					return;
+				}
+
+				if (event.key !== 'Tab') return;
+				const focusable = Array.from(lightboxDialog.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+					(element) => !element.hidden && element.getAttribute('aria-hidden') !== 'true'
+				);
+				if (focusable.length === 0) {
+					event.preventDefault();
+					lightboxDialog.focus();
+					return;
+				}
+
+				const first = focusable[0];
+				const last = focusable[focusable.length - 1];
+				if (event.shiftKey && (document.activeElement === first || !lightboxDialog.contains(document.activeElement))) {
+					event.preventDefault();
+					last.focus();
+				} else if (!event.shiftKey && (document.activeElement === last || !lightboxDialog.contains(document.activeElement))) {
+					event.preventDefault();
+					first.focus();
 				}
 			});
 		</script>

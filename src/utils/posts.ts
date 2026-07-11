@@ -14,7 +14,17 @@ export async function getPublishedPosts(lang: PostLang): Promise<CollectionEntry
 		if (lang === 'en') return data.lang === 'en';
 		return data.lang === 'zh' || data.lang === undefined;
 	});
-	return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	return posts.sort((a, b) => {
+		const byDate = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+		if (byDate !== 0) return byDate;
+
+		// Content loader order is not guaranteed across filesystems. A path
+		// tiebreaker keeps pagination and previous/next links deterministic when
+		// multiple posts share the same publication date.
+		const aPath = getPostPath(a);
+		const bPath = getPostPath(b);
+		return aPath < bPath ? -1 : aPath > bPath ? 1 : 0;
+	});
 }
 
 /**

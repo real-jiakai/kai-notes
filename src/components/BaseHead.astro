@@ -10,25 +10,78 @@ import { getAlternatePath } from '../utils/posts';
 interface Props {
 	title: string;
 	description: string;
+	seoTitle?: string;
+	seoDescription?: string;
 	// 文章页传入日期以生成 og:type=article 与 article:*_time
 	pubDate?: Date;
 	updatedDate?: Date;
 	// 可选的分享图覆盖（站点级默认图为 /og-image.png）
 	image?: string;
+	imageAlt?: string;
+	noindex?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, pubDate, updatedDate, image = '/og-image.png' } = Astro.props;
+const {
+	title,
+	description,
+	seoTitle = title,
+	seoDescription = description,
+	pubDate,
+	updatedDate,
+	image = '/og-image.png',
+	imageAlt,
+	noindex = false,
+} = Astro.props;
 const socialImage = new URL(image, Astro.site);
+const isDefaultSocialImage = image === '/og-image.png';
 
 const lang = getLangFromUrl(Astro.url);
 const siteTitle = SITE_TITLE_I18N[lang];
+const socialImageAlt = imageAlt ?? (isDefaultSocialImage ? siteTitle : title);
 const rssHref = new URL(lang === 'en' ? 'en/rss.xml' : 'rss.xml', Astro.site);
 
 // hreflang：仅当对应语言版本真实存在时输出；默认语言（中文）作为 x-default
 const zhPath = lang === 'zh' ? Astro.url.pathname : await getAlternatePath(Astro.url, 'zh');
 const enPath = lang === 'en' ? Astro.url.pathname : await getAlternatePath(Astro.url, 'en');
+
+const structuredData = pubDate
+	? {
+			'@context': 'https://schema.org',
+			'@type': 'BlogPosting',
+			headline: title,
+			description: seoDescription,
+			url: canonicalURL.href,
+			mainEntityOfPage: canonicalURL.href,
+			inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+			datePublished: pubDate.toISOString(),
+			...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+			image: socialImage.href,
+			author: {
+				'@type': 'Person',
+				name: 'Jiakai Gu',
+				url: 'https://github.com/real-jiakai',
+			},
+			publisher: {
+				'@type': 'Person',
+				name: 'Jiakai Gu',
+			},
+		}
+	: {
+			'@context': 'https://schema.org',
+			'@type': 'WebPage',
+			name: seoTitle,
+			description: seoDescription,
+			url: canonicalURL.href,
+			inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+			isPartOf: {
+				'@type': 'WebSite',
+				name: siteTitle,
+				url: new URL(lang === 'en' ? '/en/' : '/', Astro.site).href,
+			},
+		};
+const structuredDataJson = JSON.stringify(structuredData).replace(/</g, '\\u003c');
 ---
 
 <!-- Global Metadata -->
@@ -46,6 +99,7 @@ const enPath = lang === 'en' ? Astro.url.pathname : await getAlternatePath(Astro
 {enPath && <link rel="alternate" hreflang="en" href={new URL(enPath, Astro.site)} />}
 {zhPath && <link rel="alternate" hreflang="x-default" href={new URL(zhPath, Astro.site)} />}
 <meta name="generator" content={Astro.generator} />
+{noindex && <meta name="robots" content="noindex,follow" />}
 
 <!-- 主题初始化：在样式表加载前确定 data-theme，避免错误主题闪烁（FOUC） -->
 <meta name="theme-color" content="#c0c0c0" />
@@ -73,26 +127,30 @@ const enPath = lang === 'en' ? Astro.url.pathname : await getAlternatePath(Astro
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
-<title>{title}</title>
-<meta name="description" content={description} />
+<title>{seoTitle}</title>
+<meta name="description" content={seoDescription} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={pubDate ? 'article' : 'website'} />
 <meta property="og:url" content={canonicalURL} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={seoTitle} />
+<meta property="og:description" content={seoDescription} />
 <meta property="og:site_name" content={siteTitle} />
 <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
 <meta property="og:image" content={socialImage} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content={siteTitle} />
+{isDefaultSocialImage && <meta property="og:image:width" content="1200" />}
+{isDefaultSocialImage && <meta property="og:image:height" content="630" />}
+<meta property="og:image:alt" content={socialImageAlt} />
 {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
 {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonicalURL} />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
+<meta name="twitter:title" content={seoTitle} />
+<meta name="twitter:description" content={seoDescription} />
 <meta name="twitter:image" content={socialImage} />
+<meta name="twitter:image:alt" content={socialImageAlt} />
+
+<!-- Structured data -->
+<script is:inline type="application/ld+json" set:html={structuredDataJson} />

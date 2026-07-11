@@ -22,10 +22,11 @@ const otherLangName = languages[otherLang];
 // 仅在对应语言页面存在时才深链，否则退回目标语言首页（避免 404）
 const otherLangUrl = (await getAlternatePath(Astro.url, otherLang)) ?? getLocalePath(otherLang, '/');
 const rssPath = lang === 'zh' ? '/rss.xml' : '/en/rss.xml';
-const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 ---
 
-<nav class="navigation">
+<a class="skip-link" href="#main-content">{t('skipToContent')}</a>
+
+<nav class="navigation" aria-label={t('nav.primary')}>
 	<div class="nav-container">
 		<!-- Left: Title + Home + About -->
 		<div class="nav-left">
@@ -43,34 +44,61 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 			<a href="https://github.com/real-jiakai/kai-notes" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
 			<a href={rssPath} class="nav-link">RSS</a>
 			<a href={otherLangUrl} class="nav-link">{otherLangName}</a>
-			<button class="nav-link theme-toggle" aria-label={t('theme.toggle')} title={t('theme.toggle')} aria-pressed="false">
+			<button type="button" class="nav-link theme-toggle" aria-label={t('theme.toggle')} title={t('theme.toggle')} aria-pressed="false">
 				<span class="theme-toggle-icon" aria-hidden="true">🌙</span>
 			</button>
 		</div>
 
 		<!-- Mobile hamburger button -->
-		<button class="hamburger mobile-only" id="hamburger-btn" aria-label={menuLabel}>
-			<span class="hamburger-line"></span>
-			<span class="hamburger-line"></span>
-			<span class="hamburger-line"></span>
+		<button
+			type="button"
+			class="hamburger mobile-only"
+			id="hamburger-btn"
+			aria-label={t('nav.menu')}
+			aria-controls="mobile-menu"
+			aria-expanded="false"
+		>
+			<span class="hamburger-line" aria-hidden="true"></span>
+			<span class="hamburger-line" aria-hidden="true"></span>
+			<span class="hamburger-line" aria-hidden="true"></span>
 		</button>
 	</div>
 
 	<!-- Mobile menu dropdown -->
-	<div class="mobile-menu" id="mobile-menu">
+	<div class="mobile-menu" id="mobile-menu" aria-hidden="true" inert>
 		<a href={homePath} class="mobile-nav-link">{t('nav.home')}</a>
 		<a href={aboutPath} class="mobile-nav-link">{t('nav.about')}</a>
 		<div class="mobile-menu-divider"></div>
 		<a href="https://github.com/real-jiakai/kai-notes" class="mobile-nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
 		<a href={rssPath} class="mobile-nav-link">RSS</a>
 		<a href={otherLangUrl} class="mobile-nav-link">{otherLangName}</a>
-		<button class="mobile-nav-link theme-toggle" aria-label={t('theme.toggle')} aria-pressed="false">
+		<button type="button" class="mobile-nav-link theme-toggle" aria-label={t('theme.toggle')} title={t('theme.toggle')} aria-pressed="false">
 			<span class="theme-toggle-icon" aria-hidden="true">🌙</span> {t('theme.toggle')}
 		</button>
 	</div>
 </nav>
 
 <style>
+	.skip-link {
+		position: fixed;
+		top: 8px;
+		left: 8px;
+		z-index: 10000;
+		padding: 8px 12px;
+		background: var(--surface);
+		color: var(--text);
+		text-decoration: none;
+		box-shadow: inset -1px -1px var(--bevel-dark-outer), inset 1px 1px var(--bevel-light-outer), inset -2px -2px var(--bevel-dark), inset 2px 2px var(--bevel-light);
+		transform: translateY(calc(-100% - 12px));
+		transition: transform 0.15s ease-out;
+	}
+
+	.skip-link:focus {
+		transform: translateY(0);
+		outline: 1px dotted var(--text);
+		outline-offset: -4px;
+	}
+
 	.navigation {
 		background: var(--surface);
 		border-bottom: 2px solid var(--border);
@@ -263,23 +291,69 @@ const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 			font-size: 18px;
 		}
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.skip-link,
+		.mobile-menu {
+			transition: none;
+		}
+	}
 </style>
 
 <script>
-	const hamburgerBtn = document.getElementById('hamburger-btn');
-	const mobileMenu = document.getElementById('mobile-menu');
+	const siteNavigation = document.querySelector('.navigation');
+	const hamburgerBtn = document.getElementById('hamburger-btn') as HTMLButtonElement | null;
+	const mobileMenu = document.getElementById('mobile-menu') as HTMLElement | null;
+
+	const menuIsOpen = () => hamburgerBtn?.getAttribute('aria-expanded') === 'true';
+
+	function setMenuOpen(open: boolean, restoreFocus = false) {
+		if (!hamburgerBtn || !mobileMenu) return;
+		hamburgerBtn.classList.toggle('active', open);
+		hamburgerBtn.setAttribute('aria-expanded', String(open));
+		mobileMenu.classList.toggle('open', open);
+		mobileMenu.setAttribute('aria-hidden', String(!open));
+		mobileMenu.toggleAttribute('inert', !open);
+
+		if (open) {
+			const firstItem = mobileMenu.querySelector<HTMLElement>('a, button');
+			window.requestAnimationFrame(() => firstItem?.focus());
+		} else if (restoreFocus) {
+			hamburgerBtn.focus();
+		}
+	}
 
 	hamburgerBtn?.addEventListener('click', () => {
-		hamburgerBtn.classList.toggle('active');
-		mobileMenu?.classList.toggle('open');
+		setMenuOpen(!menuIsOpen());
 	});
 
-	// Close menu when clicking a link
-	document.querySelectorAll('a.mobile-nav-link').forEach(link => {
-		link.addEventListener('click', () => {
-			hamburgerBtn?.classList.remove('active');
-			mobileMenu?.classList.remove('open');
-		});
+	// Close the menu after choosing a destination.
+	mobileMenu?.querySelectorAll('a.mobile-nav-link').forEach((link) => {
+		link.addEventListener('click', () => setMenuOpen(false));
+	});
+
+	// Escape closes the menu and returns focus to its trigger.
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape' && menuIsOpen()) {
+			event.preventDefault();
+			setMenuOpen(false, true);
+		}
+	});
+
+	// Close when the user interacts elsewhere without moving their focus unexpectedly.
+	document.addEventListener('click', (event) => {
+		const target = event.target;
+		if (menuIsOpen() && target instanceof Node && !siteNavigation?.contains(target)) {
+			setMenuOpen(false);
+		}
+	});
+
+	// Never leave focus inside a menu that becomes desktop-only after a resize.
+	const mobileQuery = window.matchMedia('(max-width: 600px)');
+	mobileQuery.addEventListener('change', (event) => {
+		if (!event.matches && menuIsOpen()) {
+			setMenuOpen(false, Boolean(mobileMenu?.contains(document.activeElement)));
+		}
 	});
 
 	// 主题切换：翻转 data-theme，持久化，更新图标/theme-color，同步 utterances

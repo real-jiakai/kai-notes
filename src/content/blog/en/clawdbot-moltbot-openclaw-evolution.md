@@ -1,14 +1,15 @@
 ---
 title: "🦞 A Lobster's Rise: From Clawdbot to OpenClaw - What Did This AI Crustacean Go Through?"
+seoTitle: "From Clawdbot to OpenClaw: A Lobster's Rise"
 description: "From 0 to 100K stars in two months, legal notice from Anthropic, crypto scammers hijacking the brand - this open-source lobster's transformation is more dramatic than a TV series"
+seoDescription: 'How Clawdbot became Moltbot, then OpenClaw—surviving legal pressure, brand hijacking, and explosive open-source growth.'
 pubDate: 2026-01-30
-draft: false
+heroImage: 'https://cdn.sa.net/2026/01/30/TFioCsD1f6QX4G3.webp'
 lang: 'en'
+draft: false
 ---
 
-![Cover Image](https://cdn.sa.net/2026/01/30/TFioCsD1f6QX4G3.webp)
-
-# A Lobster's Rise: From Clawdbot to OpenClaw - What Did This AI Crustacean Go Through?
+![OpenClaw lobster mascot and article title](https://cdn.sa.net/2026/01/30/TFioCsD1f6QX4G3.webp)
 
 **"Two months ago, I just spent a weekend casually building a small project. Now it has over 100K stars on GitHub and attracted 2 million visits in a single week."**
 
@@ -16,13 +17,13 @@ These are the words of Peter Steinberger (@steipete), the founder of OpenClaw.
 
 You might not know him, but you've probably used his products - he's the founder of PSPDFKit, the PDF framework that almost every iOS developer has heard of. After the company was acquired in 2023, Peter planned to retire and enjoy life. Instead, he accidentally created one of the fastest-growing open-source projects in GitHub history.
 
-Imagine: a weekend project you casually built suddenly goes viral worldwide, and even Anthropic's (Claude's parent company) legal team reaches out...This plot is more dramatic than a TV series.
+Imagine: a weekend project you casually built suddenly goes viral worldwide, and even Anthropic's (Claude's parent company) legal team reaches out... This plot is more dramatic than a TV series.
 
 Today, let's talk about the story of this "lobster's" rise.
 
 ---
 
-![Evolution Timeline](https://cdn.sa.net/2026/01/30/TcgrCwfuSDmzn8N.webp)
+![Brand evolution timeline from Clawdbot through Moltbot to OpenClaw](https://cdn.sa.net/2026/01/30/TcgrCwfuSDmzn8N.webp)
 
 ## 🦞 Chapter 1: The Birth of Clawdbot - A "Copycat" Lobster's Debut
 
@@ -105,7 +106,7 @@ In Peter's words: **"The lobster has finally completed its ultimate molt. Welcom
 
 ---
 
-![Feature Showcase](https://cdn.sa.net/2026/01/30/x4d1UakA2XwTVW8.webp)
+![Overview of OpenClaw's cross-platform AI assistant features](https://cdn.sa.net/2026/01/30/x4d1UakA2XwTVW8.webp)
 
 ## 🚀 What Can OpenClaw Do Now?
 
@@ -205,7 +206,7 @@ moltbot uninstall
 
 ---
 
-![Community](https://cdn.sa.net/2026/01/30/et9GQV1NnSRCILT.webp)
+![OpenClaw's open-source community and ecosystem](https://cdn.sa.net/2026/01/30/et9GQV1NnSRCILT.webp)
 
 ## 🔮 Future Outlook
 

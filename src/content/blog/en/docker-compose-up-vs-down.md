@@ -1,7 +1,10 @@
 ---
 title: 'docker compose down Then up -d, or Just up -d? What the Official Docs Actually Say'
+seoTitle: 'Docker Compose: Up Directly or Down Then Up?'
 description: "Based on the official Docker docs: the real difference between docker compose up -d and down + up, when up -d alone is enough, when you actually need down first, and the classic pitfall of a stale latest image."
+seoDescription: 'Learn when to run Docker Compose up directly, when down then up is safer, and how each choice affects containers, networks, data, and downtime.'
 pubDate: 2026-06-11
+heroImage: 'https://i.see.you/2026/06/11/a9Qf/20260610181808755.webp'
 lang: 'en'
 draft: false
 ---

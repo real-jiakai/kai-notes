@@ -1,9 +1,9 @@
 ---
-
 title: '当AI开始研究如何“对齐”自己，我们该警惕什么？'
 description: '揭秘Anthropic最新研究：AI能否自我监管，还是会带来新的风险？'
 pubDate: 2026-04-14
 slug: 'anthropic-ai-self-alignment'
+heroImage: 'https://i.see.you/2026/04/15/3qMx/20260415023140274.webp'
 draft: false
 ---
 

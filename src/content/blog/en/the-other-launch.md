@@ -1,7 +1,9 @@
 ---
 title: "DeepSeek V4 Shouldn't Be Overshadowed by GPT-5.5"
 description: "GPT-5.5 stole the spotlight on launch day, but DeepSeek V4's 1M-token context recall and 1.6T-parameter open-source flagship deserve attention in their own right."
+seoDescription: 'Why DeepSeek V4 deserves attention despite GPT-5.5: a capable, affordable open model with long context and strong real-world value.'
 pubDate: 2026-04-27
+heroImage: 'https://i.see.you/2026/04/27/xq5U/20260427041004089.webp'
 lang: 'en'
 draft: false
 ---
@@ -67,3 +69,5 @@ The DeepSeek team is quiet and restrained: unmoved by praise, unafraid of critic
 When I was in the second year of graduate school, from the second half of 2024 to 2025, before R1 came out, I already used DeepSeek for data processing. It was cheap, had no concurrency limits, and offered the best value for money.
 
 I am optimistic about DeepSeek. Every stir from the little blue whale pushes open source AI further forward. DeepSeek stands on the right side of history, and I look forward to more surprises from it in the future.
+
+![Every stir from the little blue whale pushes open source AI further forward](https://i.see.you/2026/04/27/d9pA/20260427045310065.webp)

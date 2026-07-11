@@ -2,7 +2,9 @@
 title: 'A New Beginning'
 description: 'Launching my personal blog!'
 pubDate: 2025-07-17
+heroImage: 'https://cdn.sa.net/2025/07/17/btHN6WzDUhQGnMv.webp'
 lang: 'en'
+draft: false
 ---
 
 During my university years, I once ran a WeChat Official Account. But due to frustration with content review and other factors, that first account ended with me voluntarily deactivating it.
